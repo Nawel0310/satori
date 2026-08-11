@@ -1,0 +1,75 @@
+"use client";
+
+import { useState } from "react";
+import { Card } from "@/components/ui/Card";
+import { Input } from "@/components/ui/Input";
+import { Button } from "@/components/ui/Button";
+import type { Client, Reminder } from "@/lib/types";
+
+interface ReminderFormProps {
+  clients: Client[];
+  defaultClientId?: string;
+  initialReminder?: Reminder;
+  onSubmit: (input: Omit<Reminder, "id" | "done">) => void;
+  onCancel: () => void;
+}
+
+export function ReminderForm({ clients, defaultClientId, initialReminder, onSubmit, onCancel }: ReminderFormProps) {
+  const [clientId, setClientId] = useState(
+    initialReminder?.clientId ?? defaultClientId ?? clients[0]?.id ?? "",
+  );
+  const [text, setText] = useState(initialReminder?.text ?? "");
+  const [dueDate, setDueDate] = useState(
+    initialReminder?.dueDate ?? new Date().toISOString().slice(0, 10),
+  );
+
+  function handleSubmit() {
+    onSubmit({ clientId, text, dueDate });
+  }
+
+  return (
+    <Card className="flex flex-col gap-6 p-6">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="reminder-client" className="text-sm font-medium text-primary">
+          Cliente
+        </label>
+        <select
+          id="reminder-client"
+          value={clientId}
+          onChange={(e) => setClientId(e.target.value)}
+          className="w-full rounded-sm border border-border bg-white px-3.5 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+        >
+          {clients.map((client) => (
+            <option key={client.id} value={client.id}>
+              {client.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <Input
+        label="Recordatorio"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Ej: Llamar para confirmar fecha de rodaje"
+        required
+      />
+
+      <Input
+        label="Fecha"
+        type="date"
+        value={dueDate}
+        onChange={(e) => setDueDate(e.target.value)}
+      />
+
+      <div className="flex justify-end gap-3 border-t border-border pt-5">
+        <Button type="button" variant="secondary" onClick={onCancel}>
+          Cancelar
+        </Button>
+        <Button type="button" onClick={handleSubmit}>
+          Guardar recordatorio
+        </Button>
+      </div>
+    </Card>
+  );
+}

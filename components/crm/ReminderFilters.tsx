@@ -3,11 +3,14 @@
 import type { Client } from "@/lib/types";
 
 export type ReminderSortDir = "asc" | "desc";
+export type ReminderStatusFilter = "todos" | "pendiente" | "hecho";
 
 interface ReminderFiltersProps {
   clients: Client[];
   clientFilter: string | "todos";
   onClientChange: (value: string | "todos") => void;
+  statusFilter: ReminderStatusFilter;
+  onStatusChange: (value: ReminderStatusFilter) => void;
   sortDir: ReminderSortDir;
   onSortDirChange: (value: ReminderSortDir) => void;
 }
@@ -16,11 +19,13 @@ export function ReminderFilters({
   clients,
   clientFilter,
   onClientChange,
+  statusFilter,
+  onStatusChange,
   sortDir,
   onSortDirChange,
 }: ReminderFiltersProps) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
       <select
         aria-label="Filtrar por cliente"
         value={clientFilter}
@@ -33,6 +38,17 @@ export function ReminderFilters({
             {client.name}
           </option>
         ))}
+      </select>
+
+      <select
+        aria-label="Filtrar por estado"
+        value={statusFilter}
+        onChange={(e) => onStatusChange(e.target.value as ReminderStatusFilter)}
+        className="rounded-sm border border-border bg-white px-3 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        <option value="todos">Todos los estados</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="hecho">Hecho</option>
       </select>
 
       <select

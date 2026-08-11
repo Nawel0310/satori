@@ -31,6 +31,9 @@ type Action =
   | { type: "MOVE_PRODUCTION_STAGE"; productionId: string; stage: PipelineStage }
   | { type: "SET_BUDGET_STATUS"; budgetId: string; status: BudgetStatus }
   | { type: "TOGGLE_REMINDER"; reminderId: string }
+  | { type: "ADD_REMINDER"; reminder: Reminder }
+  | { type: "UPDATE_REMINDER"; reminderId: string; patch: Partial<Omit<Reminder, "id">> }
+  | { type: "DELETE_REMINDER"; reminderId: string }
   | { type: "ADD_NOTE"; clientId: string; note: Note }
   | { type: "ADD_BUDGET"; budget: Budget }
   | { type: "UPDATE_BUDGET"; budgetId: string; patch: Partial<Omit<Budget, "id">> }
@@ -76,6 +79,17 @@ function demoDataReducer(state: DemoDataState, action: Action): DemoDataState {
           r.id === action.reminderId ? { ...r, done: !r.done } : r,
         ),
       };
+    case "ADD_REMINDER":
+      return { ...state, reminders: [action.reminder, ...state.reminders] };
+    case "UPDATE_REMINDER":
+      return {
+        ...state,
+        reminders: state.reminders.map((r) =>
+          r.id === action.reminderId ? { ...r, ...action.patch } : r,
+        ),
+      };
+    case "DELETE_REMINDER":
+      return { ...state, reminders: state.reminders.filter((r) => r.id !== action.reminderId) };
     case "ADD_NOTE":
       return {
         ...state,
@@ -149,6 +163,9 @@ interface DemoDataContextValue extends DemoDataState {
   approveBudget: (budgetId: string) => void;
   rejectBudget: (budgetId: string) => void;
   toggleReminder: (reminderId: string) => void;
+  addReminder: (input: Omit<Reminder, "id" | "done">) => string;
+  updateReminder: (reminderId: string, patch: Partial<Omit<Reminder, "id">>) => void;
+  deleteReminder: (reminderId: string) => void;
   addNote: (clientId: string, text: string) => void;
   addBudget: (budget: Budget) => void;
   updateBudget: (budgetId: string, patch: Partial<Omit<Budget, "id">>) => void;
@@ -178,6 +195,13 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
       approveBudget: (budgetId) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status: "aprobado" }),
       rejectBudget: (budgetId) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status: "vencido" }),
       toggleReminder: (reminderId) => dispatch({ type: "TOGGLE_REMINDER", reminderId }),
+      addReminder: (input) => {
+        const id = `rem-${Date.now()}`;
+        dispatch({ type: "ADD_REMINDER", reminder: { ...input, id, done: false } });
+        return id;
+      },
+      updateReminder: (reminderId, patch) => dispatch({ type: "UPDATE_REMINDER", reminderId, patch }),
+      deleteReminder: (reminderId) => dispatch({ type: "DELETE_REMINDER", reminderId }),
       addNote: (clientId, text) =>
         dispatch({
           type: "ADD_NOTE",
