@@ -11,7 +11,13 @@ import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { StatusBadge } from "@/components/presupuestos/StatusBadge";
 import { PencilIcon, TrashIcon } from "@/components/ui/icons";
-import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS, budgetTotal, formatCurrency } from "@/lib/format";
+import {
+  PIPELINE_STAGE_LABELS,
+  PRODUCTION_CATEGORY_LABELS,
+  budgetTotal,
+  formatCurrency,
+  formatDate,
+} from "@/lib/format";
 
 export default function ClientDetailPage() {
   const params = useParams<{ id: string }>();
@@ -64,7 +70,7 @@ export default function ClientDetailPage() {
       <div className="flex flex-col gap-6">
         <ClientCard client={client} />
 
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           <Card className="p-6">
             <h2 className="font-heading text-lg font-semibold text-primary">Producciones</h2>
             {clientProductions.length === 0 ? (
@@ -109,9 +115,41 @@ export default function ClientDetailPage() {
               </ul>
             )}
           </Card>
+
+          <Card className="p-6">
+            <h2 className="font-heading text-lg font-semibold text-primary">Recordatorios vinculados</h2>
+            {clientReminders.length === 0 ? (
+              <p className="mt-3 text-sm text-secondary">Sin recordatorios vinculados.</p>
+            ) : (
+              <ul className="mt-4 flex flex-col gap-3">
+                {clientReminders.map((r) => (
+                  <li key={r.id}>
+                    <Link
+                      href={`/crm/recordatorios/${r.id}/editar`}
+                      className="flex items-center justify-between gap-3 border-b border-border pb-3 last:border-0 last:pb-0 hover:opacity-80"
+                    >
+                      <div>
+                        <p className={`text-sm font-medium ${r.done ? "text-secondary line-through" : "text-primary"}`}>
+                          {r.text}
+                        </p>
+                        <p className="text-xs text-secondary">{formatDate(r.dueDate)}</p>
+                      </div>
+                      <span
+                        className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                          r.done ? "bg-surface text-secondary" : "border border-accent text-accent"
+                        }`}
+                      >
+                        {r.done ? "Hecho" : "Pendiente"}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </Card>
         </div>
 
-        <InteractionTimeline notes={client.notes} />
+        <InteractionTimeline clientId={client.id} notes={client.notes} />
       </div>
     </div>
   );
