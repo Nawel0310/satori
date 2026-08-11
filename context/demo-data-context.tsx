@@ -35,6 +35,8 @@ type Action =
   | { type: "UPDATE_REMINDER"; reminderId: string; patch: Partial<Omit<Reminder, "id">> }
   | { type: "DELETE_REMINDER"; reminderId: string }
   | { type: "ADD_NOTE"; clientId: string; note: Note }
+  | { type: "UPDATE_NOTE"; clientId: string; noteId: string; text: string }
+  | { type: "DELETE_NOTE"; clientId: string; noteId: string }
   | { type: "ADD_BUDGET"; budget: Budget }
   | { type: "UPDATE_BUDGET"; budgetId: string; patch: Partial<Omit<Budget, "id">> }
   | { type: "DELETE_BUDGET"; budgetId: string }
@@ -95,6 +97,27 @@ function demoDataReducer(state: DemoDataState, action: Action): DemoDataState {
         ...state,
         clients: state.clients.map((c) =>
           c.id === action.clientId ? { ...c, notes: [action.note, ...c.notes] } : c,
+        ),
+      };
+    case "UPDATE_NOTE":
+      return {
+        ...state,
+        clients: state.clients.map((c) =>
+          c.id === action.clientId
+            ? {
+                ...c,
+                notes: c.notes.map((n) => (n.id === action.noteId ? { ...n, text: action.text } : n)),
+              }
+            : c,
+        ),
+      };
+    case "DELETE_NOTE":
+      return {
+        ...state,
+        clients: state.clients.map((c) =>
+          c.id === action.clientId
+            ? { ...c, notes: c.notes.filter((n) => n.id !== action.noteId) }
+            : c,
         ),
       };
     case "ADD_BUDGET":
@@ -167,6 +190,8 @@ interface DemoDataContextValue extends DemoDataState {
   updateReminder: (reminderId: string, patch: Partial<Omit<Reminder, "id">>) => void;
   deleteReminder: (reminderId: string) => void;
   addNote: (clientId: string, text: string) => void;
+  updateNote: (clientId: string, noteId: string, text: string) => void;
+  deleteNote: (clientId: string, noteId: string) => void;
   addBudget: (budget: Budget) => void;
   updateBudget: (budgetId: string, patch: Partial<Omit<Budget, "id">>) => void;
   deleteBudget: (budgetId: string) => void;
@@ -208,6 +233,8 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
           clientId,
           note: { id: `note-${Date.now()}`, date: new Date().toISOString().slice(0, 10), text },
         }),
+      updateNote: (clientId, noteId, text) => dispatch({ type: "UPDATE_NOTE", clientId, noteId, text }),
+      deleteNote: (clientId, noteId) => dispatch({ type: "DELETE_NOTE", clientId, noteId }),
       addBudget: (budget) => dispatch({ type: "ADD_BUDGET", budget }),
       updateBudget: (budgetId, patch) => dispatch({ type: "UPDATE_BUDGET", budgetId, patch }),
       deleteBudget: (budgetId) => dispatch({ type: "DELETE_BUDGET", budgetId }),
