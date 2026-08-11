@@ -122,7 +122,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         <nav className="flex flex-1 flex-col gap-1" aria-label="Navegación principal" onClick={onClose}>
         <SidebarNavItem href="/dashboard" icon={icons.dashboard} label="Dashboard" matchPrefix={false} />
-        <SidebarNavItem href="/crm" icon={icons.crm} label="CRM" />
+        <SidebarNavItem href="/crm" icon={icons.crm} label="Gestión Clientes" />
 
         {inCrm ? (
           <div className="ml-6 mt-1 flex flex-col gap-1 border-l border-white/10 pl-3">

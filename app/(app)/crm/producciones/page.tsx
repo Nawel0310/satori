@@ -1,19 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useDemoData } from "@/context/demo-data-context";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { RowAction } from "@/components/ui/RowAction";
+import { PencilIcon, TrashIcon } from "@/components/ui/icons";
+import { ProductionFilters, type ProductionSortDir } from "@/components/crm/ProductionFilters";
 import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS, formatDate } from "@/lib/format";
+import type { PipelineStage, ProductionCategory } from "@/lib/types";
 
 export default function ProduccionesPage() {
   const { productions, clients, deleteProduction } = useDemoData();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [clientFilter, setClientFilter] = useState<string | "todos">("todos");
+  const [categoryFilter, setCategoryFilter] = useState<ProductionCategory | "todas">("todas");
+  const [stageFilter, setStageFilter] = useState<PipelineStage | "todas">("todas");
+  const [sortDir, setSortDir] = useState<ProductionSortDir>("asc");
 
   function clientName(clientId: string) {
     return clients.find((c) => c.id === clientId)?.name ?? "Cliente eliminado";
   }
+
+  const filteredProductions = useMemo(() => {
+    const filtered = productions.filter((production) => {
+      const matchesClient = clientFilter === "todos" || production.clientId === clientFilter;
+      const matchesCategory = categoryFilter === "todas" || production.category === categoryFilter;
+      const matchesStage = stageFilter === "todas" || production.stage === stageFilter;
+      return matchesClient && matchesCategory && matchesStage;
+    });
+    return [...filtered].sort((a, b) => {
+      if (!a.startDate && !b.startDate) return 0;
+      if (!a.startDate) return 1;
+      if (!b.startDate) return -1;
+      const diff = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      return sortDir === "asc" ? diff : -diff;
+    });
+  }, [productions, clientFilter, categoryFilter, stageFilter, sortDir]);
 
   const pendingProduction = productions.find((p) => p.id === pendingDeleteId);
 
@@ -29,9 +53,23 @@ export default function ProduccionesPage() {
         </Link>
       </header>
 
-      {productions.length === 0 ? (
+      <div className="mb-6">
+        <ProductionFilters
+          clients={clients}
+          clientFilter={clientFilter}
+          onClientChange={setClientFilter}
+          categoryFilter={categoryFilter}
+          onCategoryChange={setCategoryFilter}
+          stageFilter={stageFilter}
+          onStageChange={setStageFilter}
+          sortDir={sortDir}
+          onSortDirToggle={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
+        />
+      </div>
+
+      {filteredProductions.length === 0 ? (
         <div className="rounded-md border border-dashed border-border py-16 text-center">
-          <p className="text-sm text-secondary">Todavía no hay producciones cargadas.</p>
+          <p className="text-sm text-secondary">Ninguna producción coincide con los filtros.</p>
         </div>
       ) : (
         <div className="overflow-x-auto rounded-md border border-border bg-white">
@@ -59,7 +97,7 @@ export default function ProduccionesPage() {
               </tr>
             </thead>
             <tbody>
-              {productions.map((production) => (
+              {filteredProductions.map((production) => (
                 <tr key={production.id} className="border-b border-border last:border-0 hover:bg-surface">
                   <td className="px-5 py-4 font-medium text-primary">{production.title}</td>
                   <td className="px-5 py-4 text-secondary">{clientName(production.clientId)}</td>
@@ -69,20 +107,17 @@ export default function ProduccionesPage() {
                     {production.startDate ? formatDate(production.startDate) : "Sin definir"}
                   </td>
                   <td className="px-5 py-4">
-                    <div className="flex justify-end gap-4">
-                      <Link
+                    <div className="flex justify-end gap-2">
+                      <RowAction
+                        icon={<PencilIcon />}
+                        label="Editar"
                         href={`/crm/producciones/${production.id}/editar`}
-                        className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-                      >
-                        Editar
-                      </Link>
-                      <button
-                        type="button"
+                      />
+                      <RowAction
+                        icon={<TrashIcon />}
+                        label="Eliminar"
                         onClick={() => setPendingDeleteId(production.id)}
-                        className="cursor-pointer text-sm font-medium text-secondary hover:text-primary"
-                      >
-                        Eliminar
-                      </button>
+                      />
                     </div>
                   </td>
                 </tr>

@@ -6,6 +6,8 @@ import { useDemoData } from "@/context/demo-data-context";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { RowAction } from "@/components/ui/RowAction";
+import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 import { formatCurrency } from "@/lib/format";
 
 export default function PlantillasPage() {
@@ -44,20 +46,17 @@ export default function PlantillasPage() {
                   {template.lineItems.length} ítem(s), total {formatCurrency(templateTotal(template.lineItems))}
                 </p>
               </div>
-              <div className="flex gap-4">
-                <Link
+              <div className="flex gap-2">
+                <RowAction
+                  icon={<PencilIcon />}
+                  label="Editar"
                   href={`/presupuestos/plantillas/${template.id}/editar`}
-                  className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-                >
-                  Editar
-                </Link>
-                <button
-                  type="button"
+                />
+                <RowAction
+                  icon={<TrashIcon />}
+                  label="Eliminar"
                   onClick={() => setPendingDeleteId(template.id)}
-                  className="cursor-pointer text-sm font-medium text-secondary hover:text-primary"
-                >
-                  Eliminar
-                </button>
+                />
               </div>
             </Card>
           ))}

@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { useDemoData } from "@/context/demo-data-context";
 import type { Budget, Client } from "@/lib/types";
 import { budgetTotal, formatCurrency, formatDate } from "@/lib/format";
 import { StatusBadge } from "./StatusBadge";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { RowAction } from "@/components/ui/RowAction";
+import { EyeIcon, PencilIcon, TrashIcon } from "@/components/ui/icons";
 
 interface BudgetTableProps {
   budgets: Budget[];
@@ -69,26 +70,14 @@ export function BudgetTable({ budgets, clients }: BudgetTableProps) {
                 <StatusBadge status={budget.status} />
               </td>
               <td className="px-5 py-4">
-                <div className="flex justify-end gap-4">
-                  <Link
-                    href={`/presupuestos/${budget.id}/cliente`}
-                    className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-                  >
-                    Ver
-                  </Link>
-                  <Link
-                    href={`/presupuestos/${budget.id}/editar`}
-                    className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-                  >
-                    Editar
-                  </Link>
-                  <button
-                    type="button"
+                <div className="flex justify-end gap-2">
+                  <RowAction icon={<EyeIcon />} label="Ver" href={`/presupuestos/${budget.id}/cliente`} />
+                  <RowAction icon={<PencilIcon />} label="Editar" href={`/presupuestos/${budget.id}/editar`} />
+                  <RowAction
+                    icon={<TrashIcon />}
+                    label="Eliminar"
                     onClick={() => setPendingDeleteId(budget.id)}
-                    className="cursor-pointer text-sm font-medium text-secondary hover:text-primary"
-                  >
-                    Eliminar
-                  </button>
+                  />
                 </div>
               </td>
             </tr>

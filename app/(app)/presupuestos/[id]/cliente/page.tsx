@@ -7,6 +7,7 @@ import { useDemoData } from "@/context/demo-data-context";
 import { BudgetDocumentView } from "@/components/presupuestos/BudgetDocumentView";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 
 export default function BudgetClientViewPage() {
   const params = useParams<{ id: string }>();
@@ -37,9 +38,11 @@ export default function BudgetClientViewPage() {
         </Link>
         <div className="flex gap-3">
           <Link href={`/presupuestos/${budget.id}/editar`}>
-            <Button variant="secondary">Editar</Button>
+            <Button variant="secondary" icon={<PencilIcon />}>
+              Editar
+            </Button>
           </Link>
-          <Button variant="danger" onClick={() => setConfirmingDelete(true)}>
+          <Button variant="danger" icon={<TrashIcon />} onClick={() => setConfirmingDelete(true)}>
             Eliminar
           </Button>
         </div>

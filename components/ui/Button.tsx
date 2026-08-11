@@ -1,4 +1,4 @@
-import type { ButtonHTMLAttributes } from "react";
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 
 type Variant = "primary" | "secondary" | "ghost" | "danger";
 
@@ -15,13 +15,17 @@ const variantClasses: Record<Variant, string> = {
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: Variant;
+  icon?: ReactNode;
 }
 
-export function Button({ variant = "primary", className = "", ...props }: ButtonProps) {
+export function Button({ variant = "primary", icon, className = "", children, ...props }: ButtonProps) {
   return (
     <button
       className={`inline-flex items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-sm font-medium tracking-wide transition-colors duration-200 cursor-pointer disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 ${variantClasses[variant]} ${className}`}
       {...props}
-    />
+    >
+      {icon ? <span aria-hidden="true">{icon}</span> : null}
+      {children}
+    </button>
   );
 }

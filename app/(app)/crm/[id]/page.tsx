@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { StatusBadge } from "@/components/presupuestos/StatusBadge";
+import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS, budgetTotal, formatCurrency } from "@/lib/format";
 
 export default function ClientDetailPage() {
@@ -38,9 +39,11 @@ export default function ClientDetailPage() {
         </Link>
         <div className="flex gap-3">
           <Link href={`/crm/${client.id}/editar`}>
-            <Button variant="secondary">Editar</Button>
+            <Button variant="secondary" icon={<PencilIcon />}>
+              Editar
+            </Button>
           </Link>
-          <Button variant="danger" onClick={() => setConfirmingDelete(true)}>
+          <Button variant="danger" icon={<TrashIcon />} onClick={() => setConfirmingDelete(true)}>
             Eliminar cliente
           </Button>
         </div>
