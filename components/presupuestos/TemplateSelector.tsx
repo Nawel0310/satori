@@ -1,12 +1,13 @@
 "use client";
 
-import { BUDGET_TEMPLATES } from "@/lib/mock-data";
+import type { BudgetTemplate } from "@/lib/types";
 
 interface TemplateSelectorProps {
+  templates: BudgetTemplate[];
   onSelect: (templateId: string) => void;
 }
 
-export function TemplateSelector({ onSelect }: TemplateSelectorProps) {
+export function TemplateSelector({ templates, onSelect }: TemplateSelectorProps) {
   return (
     <div className="flex flex-col gap-1.5">
       <label htmlFor="template-select" className="text-sm font-medium text-primary">
@@ -23,7 +24,7 @@ export function TemplateSelector({ onSelect }: TemplateSelectorProps) {
         <option value="" disabled>
           Elegir plantilla…
         </option>
-        {BUDGET_TEMPLATES.map((template) => (
+        {templates.map((template) => (
           <option key={template.id} value={template.id}>
             {template.name}
           </option>

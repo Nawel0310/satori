@@ -49,7 +49,7 @@ export default function LoginPage() {
         </form>
 
         <p className="mt-6 text-center text-xs text-secondary">
-          Demo interactiva — sin autenticación real.
+          Demo interactiva, sin autenticación real.
         </p>
       </div>
     </div>

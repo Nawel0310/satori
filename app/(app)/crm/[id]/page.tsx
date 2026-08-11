@@ -1,17 +1,22 @@
 "use client";
 
-import { useParams, notFound } from "next/navigation";
+import { useParams, useRouter, notFound } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
 import { useDemoData } from "@/context/demo-data-context";
 import { ClientCard } from "@/components/crm/ClientCard";
 import { InteractionTimeline } from "@/components/crm/InteractionTimeline";
 import { Card } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { StatusBadge } from "@/components/presupuestos/StatusBadge";
 import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS, budgetTotal, formatCurrency } from "@/lib/format";
 
 export default function ClientDetailPage() {
   const params = useParams<{ id: string }>();
-  const { clients, productions, budgets } = useDemoData();
+  const router = useRouter();
+  const { clients, productions, budgets, reminders, deleteClient } = useDemoData();
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
 
   const client = clients.find((c) => c.id === params.id);
   if (!client) {
@@ -20,15 +25,38 @@ export default function ClientDetailPage() {
 
   const clientProductions = productions.filter((p) => p.clientId === client.id);
   const clientBudgets = budgets.filter((b) => b.clientId === client.id);
+  const clientReminders = reminders.filter((r) => r.clientId === client.id);
 
   return (
-    <div className="mx-auto max-w-5xl px-8 py-10">
-      <Link href="/crm" className="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-secondary hover:text-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-          <path d="m15 18-6-6 6-6" />
-        </svg>
-        Volver al listado
-      </Link>
+    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <Link href="/crm" className="inline-flex items-center gap-1.5 text-sm font-medium text-secondary hover:text-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          Volver al listado
+        </Link>
+        <div className="flex gap-3">
+          <Link href={`/crm/${client.id}/editar`}>
+            <Button variant="secondary">Editar</Button>
+          </Link>
+          <Button variant="danger" onClick={() => setConfirmingDelete(true)}>
+            Eliminar cliente
+          </Button>
+        </div>
+      </div>
+
+      <ConfirmDialog
+        open={confirmingDelete}
+        title="¿Eliminar este cliente?"
+        description={`Esto también va a eliminar ${clientProductions.length} producción(es), ${clientBudgets.length} presupuesto(s) y ${clientReminders.length} recordatorio(s) vinculados. La acción no se puede deshacer.`}
+        confirmLabel="Eliminar"
+        onCancel={() => setConfirmingDelete(false)}
+        onConfirm={() => {
+          deleteClient(client.id);
+          router.push("/crm");
+        }}
+      />
 
       <div className="flex flex-col gap-6">
         <ClientCard client={client} />

@@ -57,7 +57,7 @@ export function ClientTable({ clients, productions }: ClientTableProps) {
                   </Link>
                   <p className="mt-0.5 text-xs text-secondary">{CLIENT_TYPE_LABELS[client.type]}</p>
                 </td>
-                <td className="px-5 py-4 text-secondary">{production?.title ?? "—"}</td>
+                <td className="px-5 py-4 text-secondary">{production?.title ?? "Sin producción asociada"}</td>
                 <td className="px-5 py-4">
                   {production ? (
                     <span
@@ -66,7 +66,7 @@ export function ClientTable({ clients, productions }: ClientTableProps) {
                       {PIPELINE_STAGE_LABELS[production.stage]}
                     </span>
                   ) : (
-                    <span className="text-secondary">—</span>
+                    <span className="text-secondary">Sin etapa</span>
                   )}
                 </td>
                 <td className="px-5 py-4 text-secondary">{formatDate(client.lastContactDate)}</td>

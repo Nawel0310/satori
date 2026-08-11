@@ -2,19 +2,30 @@
 
 import { useDemoData } from "@/context/demo-data-context";
 import { formatDate } from "@/lib/format";
+import type { Reminder } from "@/lib/types";
 
-export function ReminderList() {
-  const { reminders, clients, toggleReminder } = useDemoData();
+interface ReminderListProps {
+  reminders: Reminder[];
+}
+
+export function ReminderList({ reminders }: ReminderListProps) {
+  const { clients, toggleReminder } = useDemoData();
 
   function clientName(clientId: string) {
-    return clients.find((c) => c.id === clientId)?.name ?? "Cliente";
+    return clients.find((c) => c.id === clientId)?.name ?? "Cliente eliminado";
   }
 
-  const sorted = [...reminders].sort((a, b) => Number(a.done) - Number(b.done));
+  if (reminders.length === 0) {
+    return (
+      <div className="rounded-md border border-dashed border-border py-16 text-center">
+        <p className="text-sm text-secondary">Ningún recordatorio coincide con el filtro.</p>
+      </div>
+    );
+  }
 
   return (
     <ul className="flex flex-col divide-y divide-border rounded-md border border-border bg-white">
-      {sorted.map((reminder) => (
+      {reminders.map((reminder) => (
         <li key={reminder.id} className="flex items-center gap-4 px-5 py-4">
           <button
             type="button"

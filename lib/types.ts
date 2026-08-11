@@ -7,7 +7,7 @@ export type ClientType =
   | "institucional"
   | "eventos";
 
-export type BudgetStatus = "enviado" | "visto" | "aprobado" | "vencido";
+export type BudgetStatus = "en_espera" | "enviado" | "visto" | "aprobado" | "vencido";
 
 export type ProductionCategory = "drone" | "obra" | "evento" | "institucional";
 

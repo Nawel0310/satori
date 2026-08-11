@@ -1,23 +1,24 @@
 import type { BudgetStatus } from "@/lib/types";
+import { BUDGET_STATUS_LABELS } from "@/lib/format";
 
-const STATUS_CONFIG: Record<BudgetStatus, { label: string; className: string; icon: string }> = {
+const STATUS_CONFIG: Record<BudgetStatus, { className: string; icon: string }> = {
+  en_espera: {
+    className: "border-dashed border-secondary/50 text-secondary/60",
+    icon: "M12 8v4l3 3M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z",
+  },
   enviado: {
-    label: "Enviado",
     className: "border-secondary text-secondary",
     icon: "M22 2 11 13M22 2 15 22l-4-9-9-4 20-7Z",
   },
   visto: {
-    label: "Visto",
     className: "border-accent text-accent",
     icon: "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8Z M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
   },
   aprobado: {
-    label: "Aprobado",
     className: "border-primary bg-primary text-white",
     icon: "M20 6 9 17l-5-5",
   },
   vencido: {
-    label: "Vencido",
     className: "border-secondary/60 text-secondary/70",
     icon: "M12 9v4M12 17h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z",
   },
@@ -42,7 +43,7 @@ export function StatusBadge({ status }: { status: BudgetStatus }) {
       >
         <path d={config.icon} />
       </svg>
-      {config.label}
+      {BUDGET_STATUS_LABELS[status]}
     </span>
   );
 }

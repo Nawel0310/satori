@@ -1,4 +1,4 @@
-import type { BudgetLineItem, ClientType, PipelineStage, ProductionCategory } from "./types";
+import type { BudgetLineItem, BudgetStatus, ClientType, PipelineStage, ProductionCategory } from "./types";
 
 const currencyFormatter = new Intl.NumberFormat("es-AR", {
   style: "currency",
@@ -48,4 +48,12 @@ export const PRODUCTION_CATEGORY_LABELS: Record<ProductionCategory, string> = {
   obra: "Obra civil",
   evento: "Evento",
   institucional: "Institucional",
+};
+
+export const BUDGET_STATUS_LABELS: Record<BudgetStatus, string> = {
+  en_espera: "En espera",
+  enviado: "Enviado",
+  visto: "Visto",
+  aprobado: "Aprobado",
+  vencido: "Vencido",
 };

@@ -132,7 +132,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   {
     id: "prod-002",
     clientId: "cli-002",
-    title: "Seguimiento mensual de obra — Torre Norte",
+    title: "Seguimiento mensual de obra, Torre Norte",
     category: "obra",
     stage: "ganado",
     startDate: "2026-08-28",
@@ -175,7 +175,7 @@ export const INITIAL_BUDGETS: Budget[] = [
     id: "PRE-2026-0001",
     clientId: "cli-002",
     productionId: "prod-002",
-    title: "Seguimiento mensual de obra — Torre Norte",
+    title: "Seguimiento mensual de obra, Torre Norte",
     date: "2026-08-01",
     status: "aprobado",
     lineItems: [
@@ -191,7 +191,7 @@ export const INITIAL_BUDGETS: Budget[] = [
     date: "2026-08-03",
     status: "visto",
     lineItems: [
-      { id: "li-003", description: "Día de rodaje — equipo completo", quantity: 2, unitPrice: 180000 },
+      { id: "li-003", description: "Día de rodaje, equipo completo", quantity: 2, unitPrice: 180000 },
       { id: "li-004", description: "Operador de drone + equipo", quantity: 1, unitPrice: 150000 },
       { id: "li-005", description: "Edición y montaje", quantity: 1, unitPrice: 220000 },
       { id: "li-006", description: "Locución profesional", quantity: 1, unitPrice: 60000 },
@@ -202,7 +202,7 @@ export const INITIAL_BUDGETS: Budget[] = [
     id: "PRE-2026-0003",
     clientId: "cli-003",
     productionId: "prod-003",
-    title: "Cobertura audiovisual — Evento Banco Andes",
+    title: "Cobertura audiovisual, Evento Banco Andes",
     date: "2026-08-05",
     status: "enviado",
     lineItems: [
@@ -243,7 +243,7 @@ export const INITIAL_REMINDERS: Reminder[] = [
   {
     id: "rem-003",
     clientId: "cli-003",
-    text: "Confirmar fecha de rodaje — evento Banco Andes",
+    text: "Confirmar fecha de rodaje, evento Banco Andes",
     dueDate: "2026-08-13",
     done: false,
   },
@@ -256,12 +256,12 @@ export const INITIAL_REMINDERS: Reminder[] = [
   },
 ];
 
-export const BUDGET_TEMPLATES: BudgetTemplate[] = [
+export const INITIAL_BUDGET_TEMPLATES: BudgetTemplate[] = [
   {
     id: "tpl-001",
     name: "Video institucional 2 días + dron + edición",
     lineItems: [
-      { description: "Día de rodaje — equipo completo", quantity: 2, unitPrice: 180000 },
+      { description: "Día de rodaje, equipo completo", quantity: 2, unitPrice: 180000 },
       { description: "Operador de drone + equipo", quantity: 1, unitPrice: 150000 },
       { description: "Edición y montaje", quantity: 1, unitPrice: 220000 },
       { description: "Locución profesional", quantity: 1, unitPrice: 60000 },

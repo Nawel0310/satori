@@ -9,7 +9,7 @@ interface BudgetDocumentViewProps {
 
 export function BudgetDocumentView({ budget, client }: BudgetDocumentViewProps) {
   return (
-    <div className="rounded-md border border-border bg-white p-10 shadow-sm">
+    <div className="rounded-md border border-border bg-white p-6 shadow-sm sm:p-10">
       <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border pb-6">
         <div>
           <p className="font-heading text-2xl font-bold tracking-widest text-primary">SATORI</p>
