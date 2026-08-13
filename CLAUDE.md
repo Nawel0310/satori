@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Frontend-only mocked demo for **Satori** (audiovisual production company). No backend, no real database, no real auth. Built to demo a future CRM + budgeting system before it's sold/built for real. Full spec in `DEMO-SATORI.md`; user-facing guide in `README.md` (both in Spanish).
 
-Key constraint to respect when adding features: **nothing in this demo should imply real persistence, real auth, or real integrations** (email, payments, etc.) — that's explicitly out of scope per `DEMO-SATORI.md` §2, and screens are designed not to over-promise what the paid phase would add.
+Key constraint to respect when adding features: **nothing in this demo should imply real (server-side) persistence, real auth, or real integrations** (email, payments, etc.) — that's explicitly out of scope per `DEMO-SATORI.md` §2, and screens are designed not to over-promise what the paid phase would add. Client-side `localStorage` persistence (see below) is fine — it's local to the salesperson's own browser, not a backend.
 
 ## Commands
 
@@ -26,12 +26,14 @@ No test suite is configured. Login accepts any credentials (including empty) —
 
 **Stack**: Next.js 16 (App Router) + React 19 + TypeScript + Tailwind v4 (CSS-first config via `@theme inline` in `app/globals.css`, no `tailwind.config.*` file) + pnpm. No UI or drag-and-drop libraries — the Kanban board uses native HTML5 Drag and Drop.
 
-**All state is in-memory and resets on page reload.** This is intentional (see README "⚠️ Importante"), not a bug. There is no localStorage, no API routes, no server persistence anywhere in the app.
+**All state lives in React context, persisted to the browser's `localStorage`** (key `satori-demo-data:v1`, see `context/demo-data-context.tsx`) so a demo survives an accidental reload/tab close. There is no server persistence, no API routes, no backend anywhere in the app — it's still 100% local to whichever browser is running the demo. To go back to the seed data (e.g. before a new sales call), use the "Reiniciar demo" button in the sidebar (`components/sidebar/Sidebar.tsx`), which clears `localStorage` and dispatches a `RESET` action back to `lib/mock-data.ts`'s seed arrays.
+
+**Static export (`output: "export"`) has no server, so every route must be statically resolvable at build time.** Screens that show/edit a specific entity (`ClientDetailView`, `BudgetClientView`, etc.) live behind **static** route segments (e.g. `/crm/detalle`, `/presupuestos/editar`) and read the entity `id` from the query string via `useSearchParams()` (wrapped in `<Suspense>`, required by Next for static export), not from a dynamic `[id]` route segment. This is deliberate: a `[id]` segment would need `generateStaticParams()` enumerating every valid id at build time, which is impossible for entities created live during a demo (client-generated ids like `` `cli-${Date.now()}` ``) — those ids don't exist yet at build time, so GitHub Pages would 404 on them. Follow this query-param pattern for any new "view/edit one entity" screen instead of adding a new `[id]` folder.
 
 ### Data flow
 
 - `lib/types.ts` — the entire domain model: `Client`, `Production`, `Budget`, `BudgetTemplate`, `Reminder`, `Note`, plus the union types for stages/statuses/categories (`PipelineStage`, `BudgetStatus`, `ProductionCategory`, `ClientType`).
-- `lib/mock-data.ts` — hardcoded seed data (`INITIAL_CLIENTS`, `INITIAL_PRODUCTIONS`, `INITIAL_BUDGETS`, `INITIAL_BUDGET_TEMPLATES`, `INITIAL_REMINDERS`), reset to this on every reload.
+- `lib/mock-data.ts` — hardcoded seed data (`INITIAL_CLIENTS`, `INITIAL_PRODUCTIONS`, `INITIAL_BUDGETS`, `INITIAL_BUDGET_TEMPLATES`, `INITIAL_REMINDERS`); the demo starts here and only returns to it via the sidebar's "Reiniciar demo" action (not automatically on reload — see persistence note above).
 - `context/demo-data-context.tsx` — single `useReducer`-based context (`DemoDataProvider` / `useDemoData()`) that is the *only* source of truth for all app data. All CRUD across clients, productions, budgets, templates, reminders, and notes goes through this one reducer. When adding a new mutation, add an `Action` variant + reducer case + a wrapped dispatch method on the context value — follow the existing pattern (e.g. `ADD_CLIENT`/`addClient`) rather than introducing separate local state or another context.
 - Cross-entity cascades live in the reducer, not in components — e.g. `DELETE_CLIENT` also strips that client's productions/budgets/reminders; `DELETE_PRODUCTION` unlinks (not deletes) associated budgets. Keep this cascade logic centralized here when adding new relations.
 - IDs for new entities are generated client-side as `` `${prefix}-${Date.now()}` `` inside the context's dispatch wrappers (e.g. `cli-`, `prod-`, `rem-`, `tpl-`, `note-`).

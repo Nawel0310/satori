@@ -50,7 +50,7 @@ export default function PlantillasPage() {
                 <RowAction
                   icon={<PencilIcon />}
                   label="Editar"
-                  href={`/presupuestos/plantillas/${template.id}/editar`}
+                  href={`/presupuestos/plantillas/editar?id=${template.id}`}
                 />
                 <RowAction
                   icon={<TrashIcon />}

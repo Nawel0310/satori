@@ -16,7 +16,7 @@ Si la demo convence, ahí se cotiza el desarrollo real (Bonificación #2 de `OFE
 **Es (esta etapa, gratis):**
 - Navegación clickable entre pantallas.
 - Datos mockeados/hardcodeados en el frontend (sin base de datos real).
-- Interacciones simuladas (drag & drop del embudo, "aprobar presupuesto") sin persistencia real — el estado puede resetear al recargar, eso es aceptable.
+- Interacciones simuladas (drag & drop del embudo, "aprobar presupuesto") sin persistencia real — el estado se guarda en `localStorage` del navegador para que sobreviva a un F5 durante la demo, pero no hay backend ni base de datos; un botón "Reiniciar demo" en el sidebar vuelve a los datos de ejemplo. Eso es aceptable.
 
 **No es (queda para la fase paga, post-demo):**
 - Login funcional con auth real.

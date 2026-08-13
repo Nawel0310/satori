@@ -1,8 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarNavItem } from "./SidebarNavItem";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { useDemoData } from "@/context/demo-data-context";
 
 const iconProps = {
   width: 18,
@@ -71,6 +74,12 @@ const icons = {
       <path d="M21 12H9" />
     </svg>
   ),
+  reset: (
+    <svg {...iconProps}>
+      <path d="M3 12a9 9 0 1 0 3-6.7" />
+      <path d="M3 4v5h5" />
+    </svg>
+  ),
 };
 
 interface SidebarProps {
@@ -82,6 +91,8 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
   const inCrm = pathname.startsWith("/crm");
   const inPresupuestos = pathname.startsWith("/presupuestos");
+  const { resetDemoData } = useDemoData();
+  const [confirmingReset, setConfirmingReset] = useState(false);
 
   return (
     <>
@@ -141,6 +152,15 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         ) : null}
         </nav>
 
+        <button
+          type="button"
+          onClick={() => setConfirmingReset(true)}
+          className="flex items-center gap-3 rounded-sm px-3 py-2.5 text-left text-sm font-medium text-white/50 transition-colors duration-200 hover:bg-white/10 hover:text-white"
+        >
+          <span aria-hidden="true">{icons.reset}</span>
+          Reiniciar demo
+        </button>
+
         <Link
           href="/login"
           className="flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium text-white/50 transition-colors duration-200 hover:bg-white/10 hover:text-white"
@@ -149,6 +169,19 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           Salir
         </Link>
       </aside>
+
+      <ConfirmDialog
+        open={confirmingReset}
+        title="¿Reiniciar la demo?"
+        description="Se van a borrar todos los clientes, producciones, presupuestos, plantillas y recordatorios creados o editados en este navegador, volviendo a los datos de ejemplo originales. La acción no se puede deshacer."
+        confirmLabel="Reiniciar"
+        onCancel={() => setConfirmingReset(false)}
+        onConfirm={() => {
+          resetDemoData();
+          setConfirmingReset(false);
+          onClose();
+        }}
+      />
     </>
   );
 }

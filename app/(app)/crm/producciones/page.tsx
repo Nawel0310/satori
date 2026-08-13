@@ -111,7 +111,7 @@ export default function ProduccionesPage() {
                       <RowAction
                         icon={<PencilIcon />}
                         label="Editar"
-                        href={`/crm/producciones/${production.id}/editar`}
+                        href={`/crm/producciones/editar?id=${production.id}`}
                       />
                       <RowAction
                         icon={<TrashIcon />}

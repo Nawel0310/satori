@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useReducer, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useMemo, useReducer, useRef, type ReactNode } from "react";
 import {
   INITIAL_BUDGETS,
   INITIAL_BUDGET_TEMPLATES,
@@ -27,7 +27,36 @@ interface DemoDataState {
   reminders: Reminder[];
 }
 
+const STORAGE_KEY = "satori-demo-data:v1";
+
+function loadPersistedState(): DemoDataState | null {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as DemoDataState) : null;
+  } catch {
+    return null;
+  }
+}
+
+function persistState(state: DemoDataState) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  } catch {
+    // Quota exceeded, incognito/private mode, or storage disabled — ignore.
+  }
+}
+
+function clearPersistedState() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch {
+    // ignore
+  }
+}
+
 type Action =
+  | { type: "HYDRATE"; state: DemoDataState }
+  | { type: "RESET" }
   | { type: "MOVE_PRODUCTION_STAGE"; productionId: string; stage: PipelineStage }
   | { type: "SET_BUDGET_STATUS"; budgetId: string; status: BudgetStatus }
   | { type: "TOGGLE_REMINDER"; reminderId: string }
@@ -60,6 +89,10 @@ const initialState: DemoDataState = {
 
 function demoDataReducer(state: DemoDataState, action: Action): DemoDataState {
   switch (action.type) {
+    case "HYDRATE":
+      return action.state;
+    case "RESET":
+      return initialState;
     case "MOVE_PRODUCTION_STAGE":
       return {
         ...state,
@@ -204,12 +237,29 @@ interface DemoDataContextValue extends DemoDataState {
   addTemplate: (input: Omit<BudgetTemplate, "id">) => string;
   updateTemplate: (templateId: string, patch: Partial<Omit<BudgetTemplate, "id">>) => void;
   deleteTemplate: (templateId: string) => void;
+  resetDemoData: () => void;
 }
 
 const DemoDataContext = createContext<DemoDataContextValue | null>(null);
 
 export function DemoDataProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(demoDataReducer, initialState);
+  const isFirstPersist = useRef(true);
+
+  useEffect(() => {
+    const persisted = loadPersistedState();
+    if (persisted) {
+      dispatch({ type: "HYDRATE", state: persisted });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isFirstPersist.current) {
+      isFirstPersist.current = false;
+      return;
+    }
+    persistState(state);
+  }, [state]);
 
   const value = useMemo<DemoDataContextValue>(
     () => ({
@@ -259,6 +309,10 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
       },
       updateTemplate: (templateId, patch) => dispatch({ type: "UPDATE_TEMPLATE", templateId, patch }),
       deleteTemplate: (templateId) => dispatch({ type: "DELETE_TEMPLATE", templateId }),
+      resetDemoData: () => {
+        clearPersistedState();
+        dispatch({ type: "RESET" });
+      },
     }),
     [state],
   );

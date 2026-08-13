@@ -52,7 +52,7 @@ export function ClientTable({ clients, productions }: ClientTableProps) {
             return (
               <tr key={client.id} className="border-b border-border last:border-0 hover:bg-surface">
                 <td className="px-5 py-4">
-                  <Link href={`/crm/${client.id}`} className="font-medium text-primary underline-offset-4 hover:underline">
+                  <Link href={`/crm/detalle?id=${client.id}`} className="font-medium text-primary underline-offset-4 hover:underline">
                     {client.name}
                   </Link>
                   <p className="mt-0.5 text-xs text-secondary">{CLIENT_TYPE_LABELS[client.type]}</p>

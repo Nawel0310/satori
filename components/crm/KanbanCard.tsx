@@ -28,7 +28,7 @@ export function KanbanCard({ production, clientName }: KanbanCardProps) {
         {PRODUCTION_CATEGORY_LABELS[production.category]}
       </span>
       <Link
-        href={`/crm/${production.clientId}`}
+        href={`/crm/detalle?id=${production.clientId}`}
         className="mt-2 block text-xs font-medium text-primary underline-offset-4 hover:underline"
       >
         Ver ficha →

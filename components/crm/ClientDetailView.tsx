@@ -43,7 +43,7 @@ export function ClientDetailView({ id }: { id: string }) {
           Volver al listado
         </Link>
         <div className="flex gap-3">
-          <Link href={`/crm/${client.id}/editar`}>
+          <Link href={`/crm/detalle/editar?id=${client.id}`}>
             <Button variant="secondary" icon={<PencilIcon />}>
               Editar
             </Button>
@@ -100,7 +100,7 @@ export function ClientDetailView({ id }: { id: string }) {
                 {clientBudgets.map((b) => (
                   <li key={b.id}>
                     <Link
-                      href={`/presupuestos/${b.id}/cliente`}
+                      href={`/presupuestos/cliente?id=${b.id}`}
                       className="flex items-center justify-between gap-3 border-b border-border pb-3 last:border-0 last:pb-0 hover:opacity-80"
                     >
                       <div>
@@ -124,7 +124,7 @@ export function ClientDetailView({ id }: { id: string }) {
                 {clientReminders.map((r) => (
                   <li key={r.id}>
                     <Link
-                      href={`/crm/recordatorios/${r.id}/editar`}
+                      href={`/crm/recordatorios/editar?id=${r.id}`}
                       className="flex items-center justify-between gap-3 border-b border-border pb-3 last:border-0 last:pb-0 hover:opacity-80"
                     >
                       <div>

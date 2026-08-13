@@ -22,9 +22,11 @@ Abrir [http://localhost:3000](http://localhost:3000). Redirige automáticamente 
 
 El login es falso: cualquier usuario y contraseña (incluso vacíos) entran al sistema. No hay recuperación de contraseña, registro ni 2FA — a propósito, están fuera de alcance de esta etapa.
 
-## ⚠️ Importante: los datos no se guardan
+## ⚠️ Importante: los datos se guardan en este navegador (no en un servidor)
 
-Todos los clientes, producciones, presupuestos, plantillas y recordatorios viven en memoria del navegador (`context/demo-data-context.tsx`). Cualquier cosa que se cree, edite o borre durante la demo **se pierde al recargar la página** (F5) o cerrar la pestaña. Esto es el comportamiento esperado, no un bug — está documentado así en `DEMO-SATORI.md` §2. Si necesitás mostrar la demo varias veces seguidas, simplemente recargá antes de empezar de nuevo para volver a los datos de ejemplo originales.
+Todos los clientes, producciones, presupuestos, plantillas y recordatorios viven en `localStorage` de este navegador (`context/demo-data-context.tsx`). Lo que se cree, edite o borre durante la demo **sobrevive** a un F5 o a cerrar la pestaña — pero sigue sin ser persistencia real: no hay backend ni base de datos, es 100% local a este navegador/dispositivo, y no se sincroniza con nadie más. Esto es el comportamiento esperado, no un bug — está documentado así en `DEMO-SATORI.md` §2.
+
+Si necesitás mostrar la demo varias veces seguidas (o volver a los datos de ejemplo originales), usá el botón **"Reiniciar demo"** al pie del sidebar — recargar la página (F5) ya **no** resetea los datos.
 
 ## Mapa de pantallas
 

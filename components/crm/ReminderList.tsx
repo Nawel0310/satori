@@ -71,7 +71,7 @@ export function ReminderList({ reminders }: ReminderListProps) {
             </div>
 
             <div className="flex shrink-0 gap-2">
-              <RowAction icon={<PencilIcon />} label="Editar" href={`/crm/recordatorios/${reminder.id}/editar`} />
+              <RowAction icon={<PencilIcon />} label="Editar" href={`/crm/recordatorios/editar?id=${reminder.id}`} />
               <RowAction
                 icon={<TrashIcon />}
                 label="Eliminar"

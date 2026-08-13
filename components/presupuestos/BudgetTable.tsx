@@ -71,8 +71,8 @@ export function BudgetTable({ budgets, clients }: BudgetTableProps) {
               </td>
               <td className="px-5 py-4">
                 <div className="flex justify-end gap-2">
-                  <RowAction icon={<EyeIcon />} label="Ver" href={`/presupuestos/${budget.id}/cliente`} />
-                  <RowAction icon={<PencilIcon />} label="Editar" href={`/presupuestos/${budget.id}/editar`} />
+                  <RowAction icon={<EyeIcon />} label="Ver" href={`/presupuestos/cliente?id=${budget.id}`} />
+                  <RowAction icon={<PencilIcon />} label="Editar" href={`/presupuestos/editar?id=${budget.id}`} />
                   <RowAction
                     icon={<TrashIcon />}
                     label="Eliminar"

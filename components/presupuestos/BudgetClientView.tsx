@@ -36,7 +36,7 @@ export function BudgetClientView({ id }: { id: string }) {
           Volver al listado
         </Link>
         <div className="flex gap-3">
-          <Link href={`/presupuestos/${budget.id}/editar`}>
+          <Link href={`/presupuestos/editar?id=${budget.id}`}>
             <Button variant="secondary" icon={<PencilIcon />}>
               Editar
             </Button>

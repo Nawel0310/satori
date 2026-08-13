@@ -22,10 +22,10 @@ export function ClientEditView({ id }: { id: string }) {
 
       <ClientForm
         initialClient={client}
-        onCancel={() => router.push(`/crm/${client.id}`)}
+        onCancel={() => router.push(`/crm/detalle?id=${client.id}`)}
         onSubmit={(input) => {
           updateClient(client.id, input);
-          router.push(`/crm/${client.id}`);
+          router.push(`/crm/detalle?id=${client.id}`);
         }}
       />
     </div>
