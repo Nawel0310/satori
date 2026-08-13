@@ -1,13 +1,7 @@
 import Link from "next/link";
 import type { Client, Production } from "@/lib/types";
-import { CLIENT_TYPE_LABELS, PIPELINE_STAGE_LABELS, formatDate } from "@/lib/format";
-
-const STAGE_STYLES: Record<Production["stage"], string> = {
-  contacto: "border-secondary text-secondary",
-  propuesta: "border-accent text-accent",
-  ganado: "border-primary bg-primary text-white",
-  perdido: "border-secondary/50 text-secondary/70 line-through decoration-1",
-};
+import { CLIENT_TYPE_LABELS, formatDate } from "@/lib/format";
+import { StageBadge } from "@/components/crm/StageBadge";
 
 interface ClientTableProps {
   clients: Client[];
@@ -60,11 +54,7 @@ export function ClientTable({ clients, productions }: ClientTableProps) {
                 <td className="px-5 py-4 text-secondary">{production?.title ?? "Sin producción asociada"}</td>
                 <td className="px-5 py-4">
                   {production ? (
-                    <span
-                      className={`inline-flex items-center rounded-full border px-2.5 py-1 text-xs font-medium ${STAGE_STYLES[production.stage]}`}
-                    >
-                      {PIPELINE_STAGE_LABELS[production.stage]}
-                    </span>
+                    <StageBadge stage={production.stage} />
                   ) : (
                     <span className="text-secondary">Sin etapa</span>
                   )}

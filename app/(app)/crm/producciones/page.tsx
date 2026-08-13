@@ -8,7 +8,9 @@ import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { RowAction } from "@/components/ui/RowAction";
 import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 import { ProductionFilters, type ProductionSortDir } from "@/components/crm/ProductionFilters";
-import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS, formatDate } from "@/lib/format";
+import { CategoryBadge } from "@/components/crm/CategoryBadge";
+import { StageBadge } from "@/components/crm/StageBadge";
+import { formatDate } from "@/lib/format";
 import type { PipelineStage, ProductionCategory } from "@/lib/types";
 
 export default function ProduccionesPage() {
@@ -19,8 +21,8 @@ export default function ProduccionesPage() {
   const [stageFilter, setStageFilter] = useState<PipelineStage | "todas">("todas");
   const [sortDir, setSortDir] = useState<ProductionSortDir>("asc");
 
-  function clientName(clientId: string) {
-    return clients.find((c) => c.id === clientId)?.name ?? "Cliente eliminado";
+  function client(clientId: string) {
+    return clients.find((c) => c.id === clientId);
   }
 
   const filteredProductions = useMemo(() => {
@@ -97,12 +99,29 @@ export default function ProduccionesPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredProductions.map((production) => (
+              {filteredProductions.map((production) => {
+                const productionClient = client(production.clientId);
+                return (
                 <tr key={production.id} className="border-b border-border last:border-0 hover:bg-surface">
                   <td className="px-5 py-4 font-medium text-primary">{production.title}</td>
-                  <td className="px-5 py-4 text-secondary">{clientName(production.clientId)}</td>
-                  <td className="px-5 py-4 text-secondary">{PRODUCTION_CATEGORY_LABELS[production.category]}</td>
-                  <td className="px-5 py-4 text-secondary">{PIPELINE_STAGE_LABELS[production.stage]}</td>
+                  <td className="px-5 py-4">
+                    {productionClient ? (
+                      <Link
+                        href={`/crm/detalle?id=${productionClient.id}`}
+                        className="font-medium text-primary underline-offset-4 hover:underline"
+                      >
+                        {productionClient.name}
+                      </Link>
+                    ) : (
+                      <span className="text-secondary">Cliente eliminado</span>
+                    )}
+                  </td>
+                  <td className="px-5 py-4">
+                    <CategoryBadge category={production.category} />
+                  </td>
+                  <td className="px-5 py-4">
+                    <StageBadge stage={production.stage} />
+                  </td>
                   <td className="px-5 py-4 text-secondary">
                     {production.startDate ? formatDate(production.startDate) : "Sin definir"}
                   </td>
@@ -121,7 +140,8 @@ export default function ProduccionesPage() {
                     </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
