@@ -20,7 +20,12 @@ Abrir [http://localhost:3000](http://localhost:3000). Redirige automáticamente 
 
 ## Cómo entrar
 
-El login es falso: cualquier usuario y contraseña (incluso vacíos) entran al sistema. No hay recuperación de contraseña, registro ni 2FA — a propósito, están fuera de alcance de esta etapa.
+El login pide un usuario y contraseña fijos (`lib/auth.ts`), visibles en la propia pantalla de login para quien esté probando la demo:
+
+- Usuario: `satori`
+- Contraseña: `satori2026`
+
+Sigue siendo mockeado — es un gate de un solo usuario/contraseña hardcodeado en el frontend (viaja en el bundle público, no hay backend ni hash detrás), pensado sólo para que la demo no quede abierta a cualquiera. No hay recuperación de contraseña, registro ni 2FA — a propósito, están fuera de alcance de esta etapa (auth real es parte de la fase paga, ver `DEMO-SATORI.md` §2).
 
 ## ⚠️ Importante: los datos se guardan en este navegador (no en un servidor)
 

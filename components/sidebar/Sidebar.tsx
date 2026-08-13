@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { SidebarNavItem } from "./SidebarNavItem";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useDemoData } from "@/context/demo-data-context";
+import { logout } from "@/lib/auth";
 
 const iconProps = {
   width: 18,
@@ -163,6 +164,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         <Link
           href="/login"
+          onClick={logout}
           className="flex items-center gap-3 rounded-sm px-3 py-2.5 text-sm font-medium text-white/50 transition-colors duration-200 hover:bg-white/10 hover:text-white"
         >
           <span aria-hidden="true">{icons.logout}</span>

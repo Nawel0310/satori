@@ -17,9 +17,10 @@ Si la demo convence, ahí se cotiza el desarrollo real (Bonificación #2 de `OFE
 - Navegación clickable entre pantallas.
 - Datos mockeados/hardcodeados en el frontend (sin base de datos real).
 - Interacciones simuladas (drag & drop del embudo, "aprobar presupuesto") sin persistencia real — el estado se guarda en `localStorage` del navegador para que sobreviva a un F5 durante la demo, pero no hay backend ni base de datos; un botón "Reiniciar demo" en el sidebar vuelve a los datos de ejemplo. Eso es aceptable.
+- Un gate de login con usuario/contraseña **fijos y mockeados** (`lib/auth.ts`, visibles en la propia pantalla de login) para que la demo no quede abierta a cualquiera — no es autenticación real: las credenciales viajan en el bundle público, sin backend ni hash detrás.
 
 **No es (queda para la fase paga, post-demo):**
-- Login funcional con auth real.
+- Login funcional con auth real (usuarios reales, backend, hashing, recuperación de contraseña).
 - Base de datos / backend real.
 - Envío de mail, notificaciones, pagos o integraciones de terceros.
 - Reglas de negocio o validaciones reales de Satori.

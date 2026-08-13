@@ -20,13 +20,15 @@ pnpm start    # run production build
 pnpm lint     # eslint (flat config, eslint-config-next core-web-vitals + typescript)
 ```
 
-No test suite is configured. Login accepts any credentials (including empty) — there's no real auth to test against.
+No test suite is configured. Login requires the fixed demo credentials in `lib/auth.ts` (shown on the login screen itself) — it's a mocked client-side gate, not real auth (see Architecture below).
 
 ## Architecture
 
 **Stack**: Next.js 16 (App Router) + React 19 + TypeScript + Tailwind v4 (CSS-first config via `@theme inline` in `app/globals.css`, no `tailwind.config.*` file) + pnpm. No UI or drag-and-drop libraries — the Kanban board uses native HTML5 Drag and Drop.
 
 **All state lives in React context, persisted to the browser's `localStorage`** (key `satori-demo-data:v1`, see `context/demo-data-context.tsx`) so a demo survives an accidental reload/tab close. There is no server persistence, no API routes, no backend anywhere in the app — it's still 100% local to whichever browser is running the demo. To go back to the seed data (e.g. before a new sales call), use the "Reiniciar demo" button in the sidebar (`components/sidebar/Sidebar.tsx`), which clears `localStorage` and dispatches a `RESET` action back to `lib/mock-data.ts`'s seed arrays.
+
+**Login gate is mocked, not real auth** (`lib/auth.ts`, `components/auth/AuthGuard.tsx`). Fixed username/password checked entirely client-side; on success a flag is written to `localStorage` (key `satori-demo-auth:v1`). `AuthGuard` wraps `app/(app)/layout.tsx` and reads that flag via `useSyncExternalStore` (not `useState`+`useEffect` — a plain `setState` inside an effect trips this repo's `react-hooks/set-state-in-effect` lint rule when the value comes from `localStorage`; `useSyncExternalStore`'s server-snapshot argument is also what keeps this SSR-safe during the static build), redirecting to `/login` if absent. **This is not a real security boundary** — the credentials ship in the public JS bundle, static export has no middleware to enforce this server-side, and anyone can read `lib/auth.ts`. It only exists so a casual visitor doesn't land in the CRM by accident; don't extend it to gate anything that needs to be actually secure without first replacing it with real backend-verified auth (paid-phase scope, see `DEMO-SATORI.md` §2).
 
 **Static export (`output: "export"`) has no server, so every route must be statically resolvable at build time.** Screens that show/edit a specific entity (`ClientDetailView`, `BudgetClientView`, etc.) live behind **static** route segments (e.g. `/crm/detalle`, `/presupuestos/editar`) and read the entity `id` from the query string via `useSearchParams()` (wrapped in `<Suspense>`, required by Next for static export), not from a dynamic `[id]` route segment. This is deliberate: a `[id]` segment would need `generateStaticParams()` enumerating every valid id at build time, which is impossible for entities created live during a demo (client-generated ids like `` `cli-${Date.now()}` ``) — those ids don't exist yet at build time, so GitHub Pages would 404 on them. Follow this query-param pattern for any new "view/edit one entity" screen instead of adding a new `[id]` folder.
 
@@ -40,13 +42,13 @@ No test suite is configured. Login accepts any credentials (including empty) —
 
 ### Routing / layout
 
-- `app/(app)/layout.tsx` wraps every authenticated route in `DemoDataProvider` and the `SidebarShell` — this is the only place the provider is mounted, so any route outside the `(app)` group (e.g. `/login`) has no access to `useDemoData()`.
+- `app/(app)/layout.tsx` wraps every route in the group with `AuthGuard`, then `DemoDataProvider` and the `SidebarShell` — this is the only place the provider is mounted, so any route outside the `(app)` group (e.g. `/login`) has no access to `useDemoData()` and isn't gated by `AuthGuard`.
 - `app/(app)/` route tree mirrors the screen map in `README.md` (CRM listing/detail/new/edit, embudo Kanban, producciones, recordatorios; presupuestos listing/new/edit, cliente-facing view, plantillas).
 - `app/page.tsx` is just a redirect to `/login`.
 
 ### Components
 
-- `components/crm/`, `components/presupuestos/`, `components/dashboard/`, `components/sidebar/` — feature-scoped components consumed by their matching route group.
+- `components/crm/`, `components/presupuestos/`, `components/dashboard/`, `components/sidebar/`, `components/auth/` — feature-scoped components consumed by their matching route group.
 - `components/ui/` — shared primitives (`Button`, `Card`, `Input`, `ConfirmDialog`, `RowAction`, `PlaceholderImage`, `icons.tsx`). Prefer these over ad-hoc markup for consistency.
 - `hooks/useDialogA11y.ts` — shared accessibility behavior for dialogs/modals (e.g. `ConfirmDialog`).
 - `lib/format.ts` — shared formatting helpers (dates, currency, etc.) — check here before writing new formatting logic.
