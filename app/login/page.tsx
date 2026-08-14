@@ -4,6 +4,7 @@ import { useEffect, useState, useSyncExternalStore, type FormEvent } from "react
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { withBasePath } from "@/lib/base-path";
 import {
   DEMO_CREDENTIALS,
   login,
@@ -42,11 +43,8 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen flex-1 items-center justify-center bg-primary px-6">
       <div className="w-full max-w-sm">
-        <div className="mb-10 text-center">
-          <p className="font-heading text-4xl font-bold tracking-widest text-white">SATORI</p>
-          <p className="mt-1 text-xs font-medium uppercase tracking-[0.35em] text-secondary">
-            Film &amp; Photo
-          </p>
+        <div className="mb-10 flex justify-center">
+          <img src={withBasePath("/favicon.ico")} alt="Satori" className="h-32 w-32" />
         </div>
 
         <form
