@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { SidebarNavItem } from "./SidebarNavItem";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useDemoData } from "@/context/demo-data-context";
@@ -89,9 +88,6 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
-  const pathname = usePathname();
-  const inCrm = pathname.startsWith("/crm");
-  const inPresupuestos = pathname.startsWith("/presupuestos");
   const { resetDemoData } = useDemoData();
   const [confirmingReset, setConfirmingReset] = useState(false);
 
@@ -135,22 +131,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <nav className="flex flex-1 flex-col gap-1" aria-label="Navegación principal" onClick={onClose}>
         <SidebarNavItem href="/dashboard" icon={icons.dashboard} label="Dashboard" matchPrefix={false} />
         <SidebarNavItem href="/crm" icon={icons.crm} label="Gestión Clientes" />
-
-        {inCrm ? (
-          <div className="ml-6 mt-1 flex flex-col gap-1 border-l border-white/10 pl-3">
-            <SidebarNavItem href="/crm/embudo" icon={icons.embudo} label="Embudo" />
-            <SidebarNavItem href="/crm/producciones" icon={icons.producciones} label="Producciones" />
-            <SidebarNavItem href="/crm/recordatorios" icon={icons.recordatorios} label="Recordatorios" />
-          </div>
-        ) : null}
-
+        <SidebarNavItem href="/crm/embudo" icon={icons.embudo} label="Embudo" />
+        <SidebarNavItem href="/crm/producciones" icon={icons.producciones} label="Producciones" />
+        <SidebarNavItem href="/crm/recordatorios" icon={icons.recordatorios} label="Recordatorios" />
         <SidebarNavItem href="/presupuestos" icon={icons.presupuestos} label="Presupuestos" />
-
-        {inPresupuestos ? (
-          <div className="ml-6 mt-1 flex flex-col gap-1 border-l border-white/10 pl-3">
-            <SidebarNavItem href="/presupuestos/plantillas" icon={icons.plantillas} label="Plantillas" />
-          </div>
-        ) : null}
+        <SidebarNavItem href="/presupuestos/plantillas" icon={icons.plantillas} label="Plantillas" />
         </nav>
 
         <button

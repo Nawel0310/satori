@@ -218,6 +218,7 @@ interface DemoDataContextValue extends DemoDataState {
   setBudgetStatus: (budgetId: string, status: BudgetStatus) => void;
   approveBudget: (budgetId: string) => void;
   rejectBudget: (budgetId: string) => void;
+  sendBudgetEmail: (budgetId: string) => void;
   toggleReminder: (reminderId: string) => void;
   addReminder: (input: Omit<Reminder, "id" | "done">) => string;
   updateReminder: (reminderId: string, patch: Partial<Omit<Reminder, "id">>) => void;
@@ -269,6 +270,8 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
       setBudgetStatus: (budgetId, status) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status }),
       approveBudget: (budgetId) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status: "aprobado" }),
       rejectBudget: (budgetId) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status: "vencido" }),
+      sendBudgetEmail: (budgetId) =>
+        dispatch({ type: "UPDATE_BUDGET", budgetId, patch: { emailSentAt: new Date().toISOString() } }),
       toggleReminder: (reminderId) => dispatch({ type: "TOGGLE_REMINDER", reminderId }),
       addReminder: (input) => {
         const id = `rem-${Date.now()}`;

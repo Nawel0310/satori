@@ -1,18 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, notFound } from "next/navigation";
 import Link from "next/link";
 import { useDemoData } from "@/context/demo-data-context";
 import { BudgetDocumentView } from "@/components/presupuestos/BudgetDocumentView";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
-import { PencilIcon, TrashIcon } from "@/components/ui/icons";
+import { PencilIcon, SendIcon, TrashIcon } from "@/components/ui/icons";
 
 export function BudgetClientView({ id }: { id: string }) {
   const router = useRouter();
-  const { budgets, clients, approveBudget, rejectBudget, deleteBudget } = useDemoData();
+  const { budgets, clients, approveBudget, rejectBudget, deleteBudget, sendBudgetEmail } = useDemoData();
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [confirmingResend, setConfirmingResend] = useState(false);
+  const [emailFeedback, setEmailFeedback] = useState(false);
 
   const budget = budgets.find((b) => b.id === id);
   if (!budget) {
@@ -22,6 +24,21 @@ export function BudgetClientView({ id }: { id: string }) {
   if (!client) {
     notFound();
   }
+
+  useEffect(() => {
+    if (!emailFeedback) return;
+    const timeout = setTimeout(() => setEmailFeedback(false), 2500);
+    return () => clearTimeout(timeout);
+  }, [emailFeedback]);
+
+  const handleSendEmail = () => {
+    if (budget.emailSentAt) {
+      setConfirmingResend(true);
+      return;
+    }
+    sendBudgetEmail(budget.id);
+    setEmailFeedback(true);
+  };
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:px-8">
@@ -35,7 +52,10 @@ export function BudgetClientView({ id }: { id: string }) {
           </svg>
           Volver al listado
         </Link>
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
+          <Button variant="secondary" icon={<SendIcon />} onClick={handleSendEmail}>
+            Enviar por Email
+          </Button>
           <Link href={`/presupuestos/editar?id=${budget.id}`}>
             <Button variant="secondary" icon={<PencilIcon />}>
               Editar
@@ -47,6 +67,10 @@ export function BudgetClientView({ id }: { id: string }) {
         </div>
       </div>
 
+      {emailFeedback ? (
+        <p className="mb-4 text-xs font-medium text-secondary">Presupuesto enviado por email.</p>
+      ) : null}
+
       <ConfirmDialog
         open={confirmingDelete}
         title="¿Eliminar este presupuesto?"
@@ -56,6 +80,20 @@ export function BudgetClientView({ id }: { id: string }) {
         onConfirm={() => {
           deleteBudget(budget.id);
           router.push("/presupuestos");
+        }}
+      />
+
+      <ConfirmDialog
+        open={confirmingResend}
+        danger={false}
+        title="Ya envió este presupuesto a este cliente"
+        description={`Ya le enviaste "${budget.id}" a ${client.name} por email. ¿Desea enviarlo de nuevo?`}
+        confirmLabel="Enviar de nuevo"
+        onCancel={() => setConfirmingResend(false)}
+        onConfirm={() => {
+          sendBudgetEmail(budget.id);
+          setConfirmingResend(false);
+          setEmailFeedback(true);
         }}
       />
 

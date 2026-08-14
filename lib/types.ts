@@ -51,6 +51,7 @@ export interface Budget {
   title: string;
   date: string;
   status: BudgetStatus;
+  emailSentAt?: string;
   lineItems: BudgetLineItem[];
 }
 

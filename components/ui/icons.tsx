@@ -31,6 +31,14 @@ export function PencilIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function SendIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7Z" />
+    </svg>
+  );
+}
+
 export function TrashIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...baseProps} {...props}>

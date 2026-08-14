@@ -205,6 +205,7 @@ export const INITIAL_BUDGETS: Budget[] = [
     title: "Cobertura audiovisual, Evento Banco Andes",
     date: "2026-08-05",
     status: "enviado",
+    emailSentAt: "2026-08-05T14:30:00.000Z",
     lineItems: [
       { id: "li-008", description: "Cobertura fotográfica del evento", quantity: 1, unitPrice: 110000 },
       { id: "li-009", description: "Cobertura de video + highlights 48hs", quantity: 1, unitPrice: 160000 },
