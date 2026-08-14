@@ -23,10 +23,10 @@ export function ReminderEditView({ id }: { id: string }) {
       <ReminderForm
         clients={clients}
         initialReminder={reminder}
-        onCancel={() => router.push("/crm/recordatorios")}
+        onCancel={() => router.push("/recordatorios")}
         onSubmit={(input) => {
           updateReminder(reminder.id, input);
-          router.push("/crm/recordatorios");
+          router.push("/recordatorios");
         }}
       />
     </div>

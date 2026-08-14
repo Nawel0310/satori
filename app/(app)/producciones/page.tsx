@@ -50,7 +50,7 @@ export default function ProduccionesPage() {
           <h1 className="font-heading text-3xl font-bold text-primary">Producciones</h1>
           <p className="mt-1 text-sm text-secondary">Todas las producciones, más allá de en qué etapa estén.</p>
         </div>
-        <Link href="/crm/producciones/nueva">
+        <Link href="/producciones/nueva">
           <Button>+ Nueva producción</Button>
         </Link>
       </header>
@@ -130,7 +130,7 @@ export default function ProduccionesPage() {
                       <RowAction
                         icon={<PencilIcon />}
                         label="Editar"
-                        href={`/crm/producciones/editar?id=${production.id}`}
+                        href={`/producciones/editar?id=${production.id}`}
                       />
                       <RowAction
                         icon={<TrashIcon />}

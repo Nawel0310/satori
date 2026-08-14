@@ -15,6 +15,7 @@ export const INITIAL_CLIENTS: Client[] = [
     contactEmail: "marina.colo@vistasur.com.ar",
     contactPhone: "+54 9 341 555-0142",
     lastContactDate: "2026-08-07",
+    logoUrl: "/logos/cli-001.webp",
     notes: [
       {
         id: "note-001",
@@ -36,6 +37,7 @@ export const INITIAL_CLIENTS: Client[] = [
     contactEmail: "esuarez@constructorario.com",
     contactPhone: "+54 9 341 555-0198",
     lastContactDate: "2026-08-10",
+    logoUrl: "/logos/cli-002.webp",
     notes: [
       {
         id: "note-003",
@@ -57,6 +59,7 @@ export const INITIAL_CLIENTS: Client[] = [
     contactEmail: "julieta@btlnorte.com.ar",
     contactPhone: "+54 9 11 4555-0177",
     lastContactDate: "2026-08-05",
+    logoUrl: "/logos/cli-003.webp",
     notes: [
       {
         id: "note-005",
@@ -73,6 +76,7 @@ export const INITIAL_CLIENTS: Client[] = [
     contactEmail: "dpaz@rosario.gob.ar",
     contactPhone: "+54 341 480-2000",
     lastContactDate: "2026-08-03",
+    logoUrl: "/logos/cli-004.webp",
     notes: [
       {
         id: "note-006",
@@ -94,6 +98,7 @@ export const INITIAL_CLIENTS: Client[] = [
     contactEmail: "lucas@gruposu.com.ar",
     contactPhone: "+54 9 341 555-0210",
     lastContactDate: "2026-07-31",
+    logoUrl: "/logos/cli-005.webp",
     notes: [
       {
         id: "note-008",
@@ -110,6 +115,7 @@ export const INITIAL_CLIENTS: Client[] = [
     contactEmail: "rmendez@costanera-dev.com",
     contactPhone: "+54 9 341 555-0233",
     lastContactDate: "2026-07-18",
+    logoUrl: "/logos/cli-006.webp",
     notes: [
       {
         id: "note-009",

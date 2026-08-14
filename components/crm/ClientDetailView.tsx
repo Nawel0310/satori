@@ -124,7 +124,7 @@ export function ClientDetailView({ id }: { id: string }) {
                 {clientReminders.map((r) => (
                   <li key={r.id}>
                     <Link
-                      href={`/crm/recordatorios/editar?id=${r.id}`}
+                      href={`/recordatorios/editar?id=${r.id}`}
                       className="flex items-center justify-between gap-3 border-b border-border pb-3 last:border-0 last:pb-0 hover:opacity-80"
                     >
                       <div>

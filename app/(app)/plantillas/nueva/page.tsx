@@ -16,10 +16,10 @@ export default function NuevaPlantillaPage() {
       </header>
 
       <TemplateForm
-        onCancel={() => router.push("/presupuestos/plantillas")}
+        onCancel={() => router.push("/plantillas")}
         onSubmit={(input) => {
           addTemplate(input);
-          router.push("/presupuestos/plantillas");
+          router.push("/plantillas");
         }}
       />
     </div>

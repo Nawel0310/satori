@@ -23,10 +23,10 @@ export function ProductionEditView({ id }: { id: string }) {
       <ProductionForm
         clients={clients}
         initialProduction={production}
-        onCancel={() => router.push("/crm/producciones")}
+        onCancel={() => router.push("/producciones")}
         onSubmit={(input) => {
           updateProduction(production.id, input);
-          router.push("/crm/producciones");
+          router.push("/producciones");
         }}
       />
     </div>

@@ -38,7 +38,7 @@ export default function RecordatoriosPage() {
           <h1 className="font-heading text-3xl font-bold text-primary">Recordatorios</h1>
           <p className="mt-1 text-sm text-secondary">Que ningún cliente se pierda entre tantas producciones.</p>
         </div>
-        <Link href="/crm/recordatorios/nuevo">
+        <Link href="/recordatorios/nuevo">
           <Button>+ Nuevo recordatorio</Button>
         </Link>
       </header>

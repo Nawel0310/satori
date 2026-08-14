@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/Card";
 import { CLIENT_TYPE_LABELS, formatDate } from "@/lib/format";
 import type { Client } from "@/lib/types";
+import { ClientLogo } from "@/components/crm/ClientLogo";
 
 const iconProps = {
   width: 16,
@@ -16,8 +17,9 @@ const iconProps = {
 export function ClientCard({ client }: { client: Client }) {
   return (
     <Card className="p-6">
-      <div className="flex items-start justify-between gap-4">
-        <div>
+      <div className="flex items-start gap-4">
+        <ClientLogo name={client.name} logoUrl={client.logoUrl} size="md" />
+        <div className="flex-1">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-secondary">
             {CLIENT_TYPE_LABELS[client.type]}
           </span>

@@ -22,10 +22,10 @@ export function TemplateEditView({ id }: { id: string }) {
 
       <TemplateForm
         initialTemplate={template}
-        onCancel={() => router.push("/presupuestos/plantillas")}
+        onCancel={() => router.push("/plantillas")}
         onSubmit={(input) => {
           updateTemplate(template.id, input);
-          router.push("/presupuestos/plantillas");
+          router.push("/plantillas");
         }}
       />
     </div>

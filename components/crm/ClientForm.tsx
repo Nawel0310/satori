@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { CLIENT_TYPE_LABELS } from "@/lib/format";
 import type { Client, ClientType } from "@/lib/types";
+import { ClientLogoUpload } from "@/components/crm/ClientLogoUpload";
 
 interface ClientFormProps {
   initialClient?: Client;
@@ -22,13 +23,16 @@ export function ClientForm({ initialClient, onSubmit, onCancel }: ClientFormProp
   const [lastContactDate, setLastContactDate] = useState(
     initialClient?.lastContactDate ?? new Date().toISOString().slice(0, 10),
   );
+  const [logoUrl, setLogoUrl] = useState(initialClient?.logoUrl);
 
   function handleSubmit() {
-    onSubmit({ name, type, contactName, contactEmail, contactPhone, lastContactDate });
+    onSubmit({ name, type, contactName, contactEmail, contactPhone, lastContactDate, logoUrl });
   }
 
   return (
     <Card className="flex flex-col gap-6 p-6">
+      <ClientLogoUpload name={name} value={logoUrl} onChange={setLogoUrl} />
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         <Input label="Nombre del cliente o agencia" value={name} onChange={(e) => setName(e.target.value)} required />
 

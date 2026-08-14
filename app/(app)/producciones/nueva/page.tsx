@@ -17,10 +17,10 @@ export default function NuevaProduccionPage() {
 
       <ProductionForm
         clients={clients}
-        onCancel={() => router.push("/crm/producciones")}
+        onCancel={() => router.push("/producciones")}
         onSubmit={(input) => {
           addProduction(input);
-          router.push("/crm/producciones");
+          router.push("/producciones");
         }}
       />
     </div>

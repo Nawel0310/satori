@@ -92,7 +92,7 @@ export function ReminderList({ reminders }: ReminderListProps) {
                 </td>
                 <td className="px-5 py-4">
                   <div className="flex justify-end gap-2">
-                    <RowAction icon={<PencilIcon />} label="Editar" href={`/crm/recordatorios/editar?id=${reminder.id}`} />
+                    <RowAction icon={<PencilIcon />} label="Editar" href={`/recordatorios/editar?id=${reminder.id}`} />
                     <RowAction
                       icon={<TrashIcon />}
                       label="Eliminar"

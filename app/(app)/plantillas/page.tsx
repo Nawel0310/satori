@@ -27,7 +27,7 @@ export default function PlantillasPage() {
           <h1 className="font-heading text-3xl font-bold text-primary">Plantillas de presupuesto</h1>
           <p className="mt-1 text-sm text-secondary">Paquetes reutilizables para armar presupuestos en minutos.</p>
         </div>
-        <Link href="/presupuestos/plantillas/nueva">
+        <Link href="/plantillas/nueva">
           <Button>+ Nueva plantilla</Button>
         </Link>
       </header>
@@ -50,7 +50,7 @@ export default function PlantillasPage() {
                 <RowAction
                   icon={<PencilIcon />}
                   label="Editar"
-                  href={`/presupuestos/plantillas/editar?id=${template.id}`}
+                  href={`/plantillas/editar?id=${template.id}`}
                 />
                 <RowAction
                   icon={<TrashIcon />}

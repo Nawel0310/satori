@@ -89,7 +89,7 @@ export default function DashboardPage() {
               <p className="text-sm text-secondary">No hay recordatorios pendientes.</p>
             ) : null}
           </ul>
-          <Link href="/crm/recordatorios" className="mt-4 inline-block text-sm font-medium text-primary underline underline-offset-4">
+          <Link href="/recordatorios" className="mt-4 inline-block text-sm font-medium text-primary underline underline-offset-4">
             Ver todos los recordatorios
           </Link>
         </Card>

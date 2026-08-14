@@ -25,6 +25,7 @@ export interface Client {
   contactEmail: string;
   contactPhone: string;
   lastContactDate: string;
+  logoUrl?: string;
   notes: Note[];
 }
 

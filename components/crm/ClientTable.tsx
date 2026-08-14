@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Client, Production } from "@/lib/types";
 import { CLIENT_TYPE_LABELS, formatDate } from "@/lib/format";
 import { StageBadge } from "@/components/crm/StageBadge";
+import { ClientLogo } from "@/components/crm/ClientLogo";
 
 interface ClientTableProps {
   clients: Client[];
@@ -27,6 +28,9 @@ export function ClientTable({ clients, productions }: ClientTableProps) {
         <thead>
           <tr className="border-b border-border bg-surface text-xs font-semibold uppercase tracking-wider text-secondary">
             <th scope="col" className="px-5 py-3">
+              Logo
+            </th>
+            <th scope="col" className="px-5 py-3">
               Cliente / Agencia
             </th>
             <th scope="col" className="px-5 py-3">
@@ -45,6 +49,9 @@ export function ClientTable({ clients, productions }: ClientTableProps) {
             const production = primaryProduction(client.id);
             return (
               <tr key={client.id} className="border-b border-border last:border-0 hover:bg-surface">
+                <td className="px-5 py-4">
+                  <ClientLogo name={client.name} logoUrl={client.logoUrl} size="sm" />
+                </td>
                 <td className="px-5 py-4">
                   <Link href={`/crm/detalle?id=${client.id}`} className="font-medium text-primary underline-offset-4 hover:underline">
                     {client.name}
