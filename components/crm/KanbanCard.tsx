@@ -20,7 +20,7 @@ export function KanbanCard({ production, clientName }: KanbanCardProps) {
     <div
       draggable
       onDragStart={handleDragStart}
-      className="w-64 flex-none cursor-grab rounded-sm border border-border bg-white p-3.5 shadow-sm transition-shadow duration-200 hover:shadow-md active:cursor-grabbing"
+      className="w-full flex-none cursor-grab rounded-sm border border-border bg-white p-3.5 shadow-sm transition-shadow duration-200 hover:shadow-md active:cursor-grabbing lg:w-64"
     >
       <p className="text-sm font-medium text-primary">{production.title}</p>
       <p className="mt-1 text-xs text-secondary">{clientName}</p>

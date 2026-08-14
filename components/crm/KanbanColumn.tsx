@@ -35,7 +35,7 @@ export function KanbanColumn({ stage, title, onDropProduction, children, count }
       onDragEnter={() => setIsOver(true)}
       onDragLeave={() => setIsOver(false)}
       onDrop={handleDrop}
-      className={`flex w-[282px] shrink-0 min-h-[120px] flex-col rounded-md border p-3 transition-colors duration-200 ${
+      className={`flex w-full shrink-0 min-h-[120px] flex-col rounded-md border p-3 transition-colors duration-200 lg:w-[282px] ${
         isOver ? "border-primary bg-primary/5" : "border-border bg-surface-strong"
       }`}
     >
