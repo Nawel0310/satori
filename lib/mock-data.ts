@@ -131,6 +131,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
     id: "prod-001",
     clientId: "cli-001",
     title: "Video drone lanzamiento",
+    description: "Toma aérea del edificio con luz de atardecer para la campaña de lanzamiento comercial.",
     category: "drone",
     stage: "propuesta",
     startDate: "2026-08-20",
@@ -139,8 +140,9 @@ export const INITIAL_PRODUCTIONS: Production[] = [
     id: "prod-002",
     clientId: "cli-002",
     title: "Seguimiento mensual de obra, Torre Norte",
+    description: "Registro mensual del avance de obra con dron, entrega los días 28 de cada mes.",
     category: "obra",
-    stage: "ganado",
+    stage: "en_proceso",
     startDate: "2026-08-28",
   },
   {
@@ -164,7 +166,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
     clientId: "cli-005",
     title: "Cobertura Expo Rosario 2026",
     category: "evento",
-    stage: "ganado",
+    stage: "en_proceso",
     startDate: "2026-09-15",
   },
   {
@@ -228,6 +230,30 @@ export const INITIAL_BUDGETS: Budget[] = [
     lineItems: [
       { id: "li-011", description: "Día de rodaje con dron", quantity: 1, unitPrice: 150000 },
       { id: "li-012", description: "Recorrido virtual 360°", quantity: 1, unitPrice: 130000 },
+    ],
+  },
+  {
+    id: "PRE-2026-0005",
+    clientId: "cli-001",
+    productionId: "prod-001",
+    title: "Video drone lanzamiento",
+    date: "2026-08-12",
+    status: "en_espera",
+    lineItems: [
+      { id: "li-013", description: "Día de rodaje con dron", quantity: 1, unitPrice: 150000 },
+      { id: "li-014", description: "Edición y montaje", quantity: 1, unitPrice: 90000 },
+    ],
+  },
+  {
+    id: "PRE-2026-0006",
+    clientId: "cli-005",
+    productionId: "prod-005",
+    title: "Cobertura Expo Rosario 2026",
+    date: "2026-08-15",
+    status: "aprobado",
+    lineItems: [
+      { id: "li-015", description: "Cobertura fotográfica y de video, 3 jornadas", quantity: 3, unitPrice: 140000 },
+      { id: "li-016", description: "Edición de reel para redes", quantity: 1, unitPrice: 80000 },
     ],
   },
 ];

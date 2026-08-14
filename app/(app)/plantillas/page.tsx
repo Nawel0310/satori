@@ -41,7 +41,12 @@ export default function PlantillasPage() {
           {budgetTemplates.map((template) => (
             <Card key={template.id} className="flex flex-wrap items-center justify-between gap-4 p-5">
               <div>
-                <p className="font-medium text-primary">{template.name}</p>
+                <Link
+                  href={`/plantillas/detalle?id=${template.id}`}
+                  className="font-medium text-primary underline-offset-4 hover:underline"
+                >
+                  {template.name}
+                </Link>
                 <p className="mt-1 text-xs text-secondary">
                   {template.lineItems.length} ítem(s), total {formatCurrency(templateTotal(template.lineItems))}
                 </p>

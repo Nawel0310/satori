@@ -22,16 +22,22 @@ const STAGE_PATHS: Record<PipelineStage, ReactNode> = {
       <path d="M9 13h6M9 16h4" />
     </>
   ),
-  ganado: (
+  en_proceso: (
     <>
       <circle cx="12" cy="12" r="9" />
-      <path d="m8 12.5 2.5 2.5L16 9.5" />
+      <path d="M10 8.5v7l6-3.5-6-3.5Z" />
     </>
   ),
   perdido: (
     <>
       <circle cx="12" cy="12" r="9" />
       <path d="m9 9 6 6M15 9l-6 6" />
+    </>
+  ),
+  finalizada: (
+    <>
+      <path d="M5 3v18" />
+      <path d="M5 4h13l-3 4 3 4H5" />
     </>
   ),
 };

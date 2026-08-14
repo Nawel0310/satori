@@ -55,7 +55,7 @@ export default function CrmPage() {
         />
       </div>
 
-      <ClientTable clients={filteredClients} productions={productions} />
+      <ClientTable clients={filteredClients} />
     </div>
   );
 }

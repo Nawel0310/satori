@@ -116,7 +116,14 @@ export default function ProduccionesPage() {
                 const productionClient = client(production.clientId);
                 return (
                 <tr key={production.id} className="border-b border-border last:border-0 hover:bg-surface">
-                  <td className="px-5 py-4 font-medium text-primary">{production.title}</td>
+                  <td className="px-5 py-4">
+                    <Link
+                      href={`/producciones/detalle?id=${production.id}`}
+                      className="font-medium text-primary underline-offset-4 hover:underline"
+                    >
+                      {production.title}
+                    </Link>
+                  </td>
                   <td className="px-5 py-4">
                     {productionClient ? (
                       <Link

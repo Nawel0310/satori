@@ -1,4 +1,4 @@
-export type PipelineStage = "contacto" | "propuesta" | "ganado" | "perdido";
+export type PipelineStage = "contacto" | "propuesta" | "en_proceso" | "perdido" | "finalizada";
 
 export type ClientType =
   | "inmobiliaria"
@@ -33,6 +33,7 @@ export interface Production {
   id: string;
   clientId: string;
   title: string;
+  description?: string;
   category: ProductionCategory;
   stage: PipelineStage;
   startDate?: string;

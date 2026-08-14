@@ -1,18 +1,24 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
-import type { Client, Production } from "@/lib/types";
+import { useDemoData } from "@/context/demo-data-context";
+import type { Client } from "@/lib/types";
 import { CLIENT_TYPE_LABELS, formatDate } from "@/lib/format";
-import { StageBadge } from "@/components/crm/StageBadge";
 import { ClientLogo } from "@/components/crm/ClientLogo";
+import { RowAction } from "@/components/ui/RowAction";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 
 interface ClientTableProps {
   clients: Client[];
-  productions: Production[];
 }
 
-export function ClientTable({ clients, productions }: ClientTableProps) {
-  function primaryProduction(clientId: string): Production | undefined {
-    return productions.find((p) => p.clientId === clientId);
-  }
+export function ClientTable({ clients }: ClientTableProps) {
+  const { deleteClient } = useDemoData();
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+
+  const pendingClient = clients.find((c) => c.id === pendingDeleteId);
 
   if (clients.length === 0) {
     return (
@@ -34,19 +40,21 @@ export function ClientTable({ clients, productions }: ClientTableProps) {
               Cliente / Agencia
             </th>
             <th scope="col" className="px-5 py-3">
-              Tipo de producción
+              Email
             </th>
             <th scope="col" className="px-5 py-3">
-              Etapa actual
+              Teléfono
             </th>
             <th scope="col" className="px-5 py-3">
               Último contacto
+            </th>
+            <th scope="col" className="px-5 py-3">
+              <span className="sr-only">Acciones</span>
             </th>
           </tr>
         </thead>
         <tbody>
           {clients.map((client) => {
-            const production = primaryProduction(client.id);
             return (
               <tr key={client.id} className="border-b border-border last:border-0 hover:bg-surface">
                 <td className="px-5 py-4">
@@ -58,20 +66,36 @@ export function ClientTable({ clients, productions }: ClientTableProps) {
                   </Link>
                   <p className="mt-0.5 text-xs text-secondary">{CLIENT_TYPE_LABELS[client.type]}</p>
                 </td>
-                <td className="px-5 py-4 text-secondary">{production?.title ?? "Sin producción asociada"}</td>
-                <td className="px-5 py-4">
-                  {production ? (
-                    <StageBadge stage={production.stage} />
-                  ) : (
-                    <span className="text-secondary">Sin etapa</span>
-                  )}
-                </td>
+                <td className="px-5 py-4 text-secondary">{client.contactEmail}</td>
+                <td className="px-5 py-4 text-secondary">{client.contactPhone}</td>
                 <td className="px-5 py-4 text-secondary">{formatDate(client.lastContactDate)}</td>
+                <td className="px-5 py-4">
+                  <div className="flex justify-end gap-2">
+                    <RowAction icon={<PencilIcon />} label="Editar" href={`/crm/detalle/editar?id=${client.id}`} />
+                    <RowAction
+                      icon={<TrashIcon />}
+                      label="Eliminar"
+                      onClick={() => setPendingDeleteId(client.id)}
+                    />
+                  </div>
+                </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+
+      <ConfirmDialog
+        open={pendingClient != null}
+        title="¿Eliminar este cliente?"
+        description={`"${pendingClient?.name ?? ""}" se va a eliminar, junto con sus producciones, presupuestos y recordatorios vinculados. La acción no se puede deshacer.`}
+        confirmLabel="Eliminar"
+        onCancel={() => setPendingDeleteId(null)}
+        onConfirm={() => {
+          if (pendingDeleteId) deleteClient(pendingDeleteId);
+          setPendingDeleteId(null);
+        }}
+      />
     </div>
   );
 }

@@ -20,7 +20,7 @@ const icon = {
 export default function DashboardPage() {
   const { productions, budgets, reminders, clients } = useDemoData();
 
-  const activeProductions = productions.filter((p) => p.stage !== "perdido");
+  const activeProductions = productions.filter((p) => p.stage !== "perdido" && p.stage !== "finalizada");
   const pendingBudgets = budgets.filter((b) => b.status === "enviado" || b.status === "visto");
   const pendingReminders = reminders.filter((r) => !r.done);
 
@@ -39,7 +39,7 @@ export default function DashboardPage() {
         <SummaryCard
           label="Producciones activas"
           value={String(activeProductions.length)}
-          detail="En curso entre contacto, propuesta y ganado"
+          detail="En curso entre contacto, propuesta y desarrollo"
           icon={
             <svg {...icon}>
               <path d="m22 8-6 4 6 4V8Z" />

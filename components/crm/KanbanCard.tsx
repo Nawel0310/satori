@@ -25,12 +25,20 @@ export function KanbanCard({ production, clientName }: KanbanCardProps) {
       <p className="text-sm font-medium text-primary">{production.title}</p>
       <p className="mt-1 text-xs text-secondary">{clientName}</p>
       <CategoryBadge category={production.category} className="mt-2" />
-      <Link
-        href={`/crm/detalle?id=${production.clientId}`}
-        className="mt-2 block text-xs font-medium text-primary underline-offset-4 hover:underline"
-      >
-        Ver ficha →
-      </Link>
+      <div className="mt-2 flex gap-3">
+        <Link
+          href={`/producciones/detalle?id=${production.id}`}
+          className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+        >
+          Ver Producción
+        </Link>
+        <Link
+          href={`/crm/detalle?id=${production.clientId}`}
+          className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+        >
+          Ver Cliente
+        </Link>
+      </div>
     </div>
   );
 }

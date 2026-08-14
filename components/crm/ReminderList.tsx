@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useDemoData } from "@/context/demo-data-context";
 import { formatDate } from "@/lib/format";
 import type { Reminder } from "@/lib/types";
@@ -75,9 +76,14 @@ export function ReminderList({ reminders }: ReminderListProps) {
                   </button>
                 </td>
                 <td className="px-5 py-4">
-                  <p className={`font-medium ${reminder.done ? "text-secondary line-through" : "text-primary"}`}>
+                  <Link
+                    href={`/recordatorios/detalle?id=${reminder.id}`}
+                    className={`font-medium underline-offset-4 hover:underline ${
+                      reminder.done ? "text-secondary line-through" : "text-primary"
+                    }`}
+                  >
                     {reminder.text}
-                  </p>
+                  </Link>
                   <p className="text-xs text-secondary">{clientName(reminder.clientId)}</p>
                 </td>
                 <td className="px-5 py-4 text-secondary">{formatDate(reminder.dueDate)}</td>

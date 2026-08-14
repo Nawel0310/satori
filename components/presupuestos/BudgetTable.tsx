@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useDemoData } from "@/context/demo-data-context";
 import type { Budget, Client } from "@/lib/types";
 import { budgetTotal, formatCurrency, formatDate } from "@/lib/format";
 import { StatusBadge } from "./StatusBadge";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { RowAction } from "@/components/ui/RowAction";
-import { EyeIcon, PencilIcon, TrashIcon } from "@/components/ui/icons";
+import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 
 interface BudgetTableProps {
   budgets: Budget[];
@@ -18,8 +19,8 @@ export function BudgetTable({ budgets, clients }: BudgetTableProps) {
   const { deleteBudget } = useDemoData();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
-  function clientName(clientId: string) {
-    return clients.find((c) => c.id === clientId)?.name ?? "Cliente eliminado";
+  function client(clientId: string) {
+    return clients.find((c) => c.id === clientId);
   }
 
   const pendingBudget = budgets.find((b) => b.id === pendingDeleteId);
@@ -58,30 +59,50 @@ export function BudgetTable({ budgets, clients }: BudgetTableProps) {
           </tr>
         </thead>
         <tbody>
-          {budgets.map((budget) => (
-            <tr key={budget.id} className="border-b border-border last:border-0 hover:bg-surface">
-              <td className="px-5 py-4 font-medium text-primary">{budget.id}</td>
-              <td className="px-5 py-4 text-secondary">{clientName(budget.clientId)}</td>
-              <td className="px-5 py-4 text-secondary">{formatDate(budget.date)}</td>
-              <td className="px-5 py-4 text-right font-medium tabular-nums text-primary">
-                {formatCurrency(budgetTotal(budget.lineItems))}
-              </td>
-              <td className="px-5 py-4">
-                <StatusBadge status={budget.status} />
-              </td>
-              <td className="px-5 py-4">
-                <div className="flex justify-end gap-2">
-                  <RowAction icon={<EyeIcon />} label="Ver" href={`/presupuestos/cliente?id=${budget.id}`} />
-                  <RowAction icon={<PencilIcon />} label="Editar" href={`/presupuestos/editar?id=${budget.id}`} />
-                  <RowAction
-                    icon={<TrashIcon />}
-                    label="Eliminar"
-                    onClick={() => setPendingDeleteId(budget.id)}
-                  />
-                </div>
-              </td>
-            </tr>
-          ))}
+          {budgets.map((budget) => {
+            const budgetClient = client(budget.clientId);
+            return (
+              <tr key={budget.id} className="border-b border-border last:border-0 hover:bg-surface">
+                <td className="px-5 py-4">
+                  <Link
+                    href={`/presupuestos/cliente?id=${budget.id}`}
+                    className="font-medium text-primary underline-offset-4 hover:underline"
+                  >
+                    {budget.id}
+                  </Link>
+                </td>
+                <td className="px-5 py-4">
+                  {budgetClient ? (
+                    <Link
+                      href={`/crm/detalle?id=${budgetClient.id}`}
+                      className="font-medium text-primary underline-offset-4 hover:underline"
+                    >
+                      {budgetClient.name}
+                    </Link>
+                  ) : (
+                    <span className="text-secondary">Cliente eliminado</span>
+                  )}
+                </td>
+                <td className="px-5 py-4 text-secondary">{formatDate(budget.date)}</td>
+                <td className="px-5 py-4 text-right font-medium tabular-nums text-primary">
+                  {formatCurrency(budgetTotal(budget.lineItems))}
+                </td>
+                <td className="px-5 py-4">
+                  <StatusBadge status={budget.status} />
+                </td>
+                <td className="px-5 py-4">
+                  <div className="flex justify-end gap-2">
+                    <RowAction icon={<PencilIcon />} label="Editar" href={`/presupuestos/editar?id=${budget.id}`} />
+                    <RowAction
+                      icon={<TrashIcon />}
+                      label="Eliminar"
+                      onClick={() => setPendingDeleteId(budget.id)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
 

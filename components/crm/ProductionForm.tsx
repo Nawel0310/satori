@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
+import { SearchSelect } from "@/components/ui/SearchSelect";
 import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
 import type { Client, PipelineStage, Production, ProductionCategory } from "@/lib/types";
 
@@ -26,6 +28,7 @@ export function ProductionForm({
     initialProduction?.clientId ?? defaultClientId ?? clients[0]?.id ?? "",
   );
   const [title, setTitle] = useState(initialProduction?.title ?? "");
+  const [description, setDescription] = useState(initialProduction?.description ?? "");
   const [category, setCategory] = useState<ProductionCategory>(initialProduction?.category ?? "drone");
   const [stage, setStage] = useState<PipelineStage>(initialProduction?.stage ?? "contacto");
   const [startDate, setStartDate] = useState(initialProduction?.startDate ?? "");
@@ -34,6 +37,7 @@ export function ProductionForm({
     onSubmit({
       clientId,
       title,
+      description: description.trim() || undefined,
       category,
       stage,
       startDate: startDate || undefined,
@@ -42,30 +46,28 @@ export function ProductionForm({
 
   return (
     <Card className="flex flex-col gap-6 p-6">
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="production-client" className="text-sm font-medium text-primary">
-          Cliente
-        </label>
-        <select
-          id="production-client"
-          value={clientId}
-          onChange={(e) => setClientId(e.target.value)}
-          className="w-full rounded-sm border border-border bg-white px-3.5 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          {clients.map((client) => (
-            <option key={client.id} value={client.id}>
-              {client.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
       <Input
         label="Título de la producción"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Ej: Video drone lanzamiento"
         required
+      />
+
+      <Textarea
+        label="Descripción"
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        placeholder="Notas o detalles adicionales sobre la producción (opcional)"
+        rows={3}
+      />
+
+      <SearchSelect
+        label="Cliente"
+        options={clients.map((client) => ({ id: client.id, label: client.name }))}
+        value={clientId}
+        onChange={setClientId}
+        searchPlaceholder="Buscar cliente…"
       />
 
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
