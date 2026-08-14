@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Presupuesto Satori</title>
+<!--
+  Plantilla de email para EmailJS — presupuesto en formato "documento",
+  visualmente igual a la vista /presupuestos/cliente de la app
+  (components/presupuestos/BudgetDocumentView.tsx).
+
+  Cómo usarla en EmailJS:
+  1. Dashboard > Email Templates > Create New Template.
+  2. Abrir el editor en modo código ("Edit content as HTML" / ícono </>).
+  3. Pegar TODO este archivo tal cual.
+  4. En la pestaña "Settings" del template (no en este HTML) configurar:
+       To Email  -> {{client_contact_email}}
+       To Name   -> {{client_name}}
+       From Name -> "Satori Film & Photo" (fijo) o {{sender_name}}
+       Reply To  -> {{sender_email}}
+
+  Variables que rellena el código al llamar a emailjs.send():
+    {{budget_id}}             budget.id
+    {{budget_date}}           formatDate(budget.date)
+    {{budget_title}}          budget.title
+    {{client_name}}           client.name
+    {{client_contact_name}}   client.contactName
+    {{{line_items_html}}}     filas <tr> pre-armadas desde budget.lineItems
+                              (formatCurrency/lineItemTotal, lib/format.ts).
+                              OJO: triple llave, no doble — EmailJS escapa
+                              {{var}} pero no {{{var}}}, y esta variable
+                              trae HTML de tabla que necesita renderizarse
+                              tal cual. Es HTML propio del vendedor (no de
+                              un usuario final no confiable), por eso es
+                              seguro inyectarlo sin escapar acá.
+    {{budget_total}}          formatCurrency(budgetTotal(budget.lineItems))
+    {{sender_name}}           placeholder — completar con datos reales
+    {{sender_email}}          placeholder — completar con datos reales
+    {{sender_phone}}          placeholder — completar con datos reales
+
+  Deliberadamente NO incluye el StatusBadge (en_espera/enviado/visto/
+  aprobado/vencido) que sí aparece en BudgetDocumentView: es un indicador
+  interno de pipeline del CRM, mostrar "Enviado" adentro del email que se
+  está enviando es redundante, y cualquier otro estado sería confuso para
+  el cliente que lo recibe.
+-->
+<style>
+  body, table, td { margin: 0; padding: 0; }
+  body { background-color: #fafafa; -webkit-text-size-adjust: 100%; }
+  table { border-collapse: collapse; }
+  img { border: 0; display: block; }
+</style>
+</head>
+<body style="margin:0; padding:0; background-color:#fafafa;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#fafafa;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:100%; background-color:#ffffff; border:1px solid #e4e4e7;">
+
+          <!-- Header: wordmark + presupuesto id/fecha -->
+          <tr>
+            <td style="padding:40px 40px 24px 40px; border-bottom:1px solid #e4e4e7;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td valign="top" align="left">
+                    <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:24px; font-weight:700; letter-spacing:2px; color:#111113; text-transform:uppercase;">
+                      Satori
+                    </p>
+                    <p style="margin:2px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:10px; font-weight:500; letter-spacing:3px; color:#6b6e73; text-transform:uppercase;">
+                      Film &amp; Photo
+                    </p>
+                  </td>
+                  <td valign="top" align="right">
+                    <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; color:#6b6e73; text-transform:uppercase;">
+                      Presupuesto
+                    </p>
+                    <p style="margin:2px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:18px; font-weight:700; color:#111113;">
+                      {{budget_id}}
+                    </p>
+                    <p style="margin:4px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#6b6e73;">
+                      {{budget_date}}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Cliente -->
+          <tr>
+            <td style="padding:24px 40px 0 40px;">
+              <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; color:#6b6e73; text-transform:uppercase;">
+                Cliente
+              </p>
+              <p style="margin:4px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:17px; font-weight:500; color:#111113;">
+                {{client_name}}
+              </p>
+              <p style="margin:2px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:13px; color:#6b6e73;">
+                {{client_contact_name}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- Título del presupuesto -->
+          <tr>
+            <td style="padding:28px 40px 0 40px;">
+              <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:22px; font-weight:700; color:#111113; text-transform:uppercase; letter-spacing:0.5px;">
+                {{budget_title}}
+              </p>
+            </td>
+          </tr>
+
+          <!-- Tabla de ítems -->
+          <tr>
+            <td style="padding:24px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <thead>
+                  <tr>
+                    <th align="left" style="padding:0 0 12px 0; border-bottom:1px solid #e4e4e7; font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.5px; color:#6b6e73; text-transform:uppercase;">
+                      Descripción
+                    </th>
+                    <th align="right" style="padding:0 0 12px 0; border-bottom:1px solid #e4e4e7; font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.5px; color:#6b6e73; text-transform:uppercase;">
+                      Cant.
+                    </th>
+                    <th align="right" style="padding:0 0 12px 0; border-bottom:1px solid #e4e4e7; font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.5px; color:#6b6e73; text-transform:uppercase;">
+                      Precio unitario
+                    </th>
+                    <th align="right" style="padding:0 0 12px 0; border-bottom:1px solid #e4e4e7; font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.5px; color:#6b6e73; text-transform:uppercase;">
+                      Subtotal
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {{{line_items_html}}}
+                </tbody>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Total -->
+          <tr>
+            <td style="padding:16px 40px 0 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="border-top:1px solid #e4e4e7; padding-top:16px;" align="right">
+                    <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; color:#6b6e73; text-transform:uppercase;">
+                      Total
+                    </p>
+                    <p style="margin:4px 0 0 0; font-family:Arial,Helvetica,sans-serif; font-size:28px; font-weight:700; color:#111113;">
+                      {{budget_total}}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer / datos de contacto -->
+          <tr>
+            <td style="padding:32px 40px 40px 40px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="border-top:1px solid #e4e4e7; padding-top:20px;">
+                    <p style="margin:0 0 8px 0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#6b6e73;">
+                      Este presupuesto fue generado por Satori Film &amp; Photo. Ante cualquier consulta, respondé este email o contactanos:
+                    </p>
+                    <p style="margin:0; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#111113;">
+                      {{sender_name}} &middot; {{sender_email}} &middot; {{sender_phone}}
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

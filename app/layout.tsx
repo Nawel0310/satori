@@ -14,7 +14,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Satori. Sistema de producción",
+  title: "Satori - Sistema de producción",
   description: "Demo interactiva: CRM y presupuestos para Satori Film & Photo.",
 };
 
