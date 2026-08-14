@@ -7,6 +7,7 @@ import { useDemoData } from "@/context/demo-data-context";
 import { BudgetDocumentView } from "@/components/presupuestos/BudgetDocumentView";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { Toast } from "@/components/ui/Toast";
 import { PencilIcon, SendIcon, TrashIcon } from "@/components/ui/icons";
 
 export function BudgetClientView({ id }: { id: string }) {
@@ -67,10 +68,6 @@ export function BudgetClientView({ id }: { id: string }) {
         </div>
       </div>
 
-      {emailFeedback ? (
-        <p className="mb-4 text-xs font-medium text-secondary">Presupuesto enviado por email.</p>
-      ) : null}
-
       <ConfirmDialog
         open={confirmingDelete}
         title="¿Eliminar este presupuesto?"
@@ -122,6 +119,8 @@ export function BudgetClientView({ id }: { id: string }) {
           </Button>
         </div>
       </div>
+
+      <Toast open={emailFeedback} icon={<SendIcon />} message="Presupuesto enviado por email." />
     </div>
   );
 }
