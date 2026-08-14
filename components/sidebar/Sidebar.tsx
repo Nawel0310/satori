@@ -62,9 +62,8 @@ const icons = {
   ),
   plantillas: (
     <svg {...iconProps}>
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-      <path d="M14 2v6h6" />
-      <path d="M9 13h6M9 17h3" />
+      <rect x="9" y="9" width="13" height="13" rx="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
     </svg>
   ),
   logout: (
@@ -130,11 +129,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         <nav className="flex flex-1 flex-col gap-1" aria-label="Navegación principal" onClick={onClose}>
         <SidebarNavItem href="/dashboard" icon={icons.dashboard} label="Dashboard" matchPrefix={false} />
-        <SidebarNavItem href="/crm" icon={icons.crm} label="Gestión Clientes" />
+        <SidebarNavItem href="/crm" icon={icons.crm} label="Gestión Clientes" matchPrefix={false} />
         <SidebarNavItem href="/crm/embudo" icon={icons.embudo} label="Embudo" />
         <SidebarNavItem href="/crm/producciones" icon={icons.producciones} label="Producciones" />
         <SidebarNavItem href="/crm/recordatorios" icon={icons.recordatorios} label="Recordatorios" />
-        <SidebarNavItem href="/presupuestos" icon={icons.presupuestos} label="Presupuestos" />
+        <SidebarNavItem href="/presupuestos" icon={icons.presupuestos} label="Presupuestos" matchPrefix={false} />
         <SidebarNavItem href="/presupuestos/plantillas" icon={icons.plantillas} label="Plantillas" />
         </nav>
 
