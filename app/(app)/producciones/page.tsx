@@ -17,7 +17,6 @@ export default function ProduccionesPage() {
   const { productions, clients, deleteProduction } = useDemoData();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
-  const [clientFilter, setClientFilter] = useState<string | "todos">("todos");
   const [categoryFilter, setCategoryFilter] = useState<ProductionCategory | "todas">("todas");
   const [stageFilter, setStageFilter] = useState<PipelineStage | "todas">("todas");
   const [sortDir, setSortDir] = useState<ProductionSortDir>("asc");
@@ -29,7 +28,6 @@ export default function ProduccionesPage() {
   const filteredProductions = useMemo(() => {
     const keyword = search.trim().toLowerCase();
     const filtered = productions.filter((production) => {
-      const matchesClient = clientFilter === "todos" || production.clientId === clientFilter;
       const matchesCategory = categoryFilter === "todas" || production.category === categoryFilter;
       const matchesStage = stageFilter === "todas" || production.stage === stageFilter;
       const searchable = [
@@ -41,7 +39,7 @@ export default function ProduccionesPage() {
         .join(" ")
         .toLowerCase();
       const matchesSearch = searchable.includes(keyword);
-      return matchesSearch && matchesClient && matchesCategory && matchesStage;
+      return matchesSearch && matchesCategory && matchesStage;
     });
     return [...filtered].sort((a, b) => {
       if (!a.startDate && !b.startDate) return 0;
@@ -50,7 +48,7 @@ export default function ProduccionesPage() {
       const diff = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
       return sortDir === "asc" ? diff : -diff;
     });
-  }, [productions, clients, search, clientFilter, categoryFilter, stageFilter, sortDir]);
+  }, [productions, clients, search, categoryFilter, stageFilter, sortDir]);
 
   const pendingProduction = productions.find((p) => p.id === pendingDeleteId);
 
@@ -70,9 +68,6 @@ export default function ProduccionesPage() {
         <ProductionFilters
           search={search}
           onSearchChange={setSearch}
-          clients={clients}
-          clientFilter={clientFilter}
-          onClientChange={setClientFilter}
           categoryFilter={categoryFilter}
           onCategoryChange={setCategoryFilter}
           stageFilter={stageFilter}

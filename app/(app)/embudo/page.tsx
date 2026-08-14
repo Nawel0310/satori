@@ -1,14 +1,29 @@
 "use client";
 
-import { useState } from "react";
-import { useDemoData } from "@/context/demo-data-context";
+import { useEffect, useRef, useState } from "react";
 import { EmbudoFilters } from "@/components/crm/EmbudoFilters";
 import { KanbanBoard } from "@/components/crm/KanbanBoard";
 
 export default function EmbudoPage() {
-  const { clients } = useDemoData();
   const [search, setSearch] = useState("");
-  const [clientFilter, setClientFilter] = useState<string | "todos">("todos");
+  const boardRef = useRef<HTMLDivElement>(null);
+  const [rowWidth, setRowWidth] = useState<number>();
+
+  useEffect(() => {
+    const board = boardRef.current;
+    if (!board) return;
+    const observer = new ResizeObserver(() => {
+      const children = Array.from(board.children) as HTMLElement[];
+      if (children.length === 0) return;
+      const firstTop = children[0].offsetTop;
+      const rowChildren = children.filter((c) => c.offsetTop === firstTop);
+      const left = rowChildren[0].getBoundingClientRect().left;
+      const right = rowChildren[rowChildren.length - 1].getBoundingClientRect().right;
+      setRowWidth(right - left);
+    });
+    observer.observe(board);
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
@@ -19,17 +34,11 @@ export default function EmbudoPage() {
         </p>
       </header>
 
-      <div className="mb-6">
-        <EmbudoFilters
-          search={search}
-          onSearchChange={setSearch}
-          clients={clients}
-          clientFilter={clientFilter}
-          onClientChange={setClientFilter}
-        />
+      <div className="mb-6" style={{ maxWidth: rowWidth }}>
+        <EmbudoFilters search={search} onSearchChange={setSearch} />
       </div>
 
-      <KanbanBoard search={search} clientFilter={clientFilter} />
+      <KanbanBoard search={search} boardRef={boardRef} />
     </div>
   );
 }

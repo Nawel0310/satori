@@ -1,7 +1,7 @@
 "use client";
 
 import { BUDGET_STATUS_LABELS } from "@/lib/format";
-import type { BudgetStatus, Client } from "@/lib/types";
+import type { BudgetStatus } from "@/lib/types";
 import { SearchInput } from "@/components/ui/SearchInput";
 
 export type BudgetSortField = "fecha" | "monto";
@@ -10,9 +10,6 @@ export type BudgetSortDir = "asc" | "desc";
 interface BudgetFiltersProps {
   search: string;
   onSearchChange: (value: string) => void;
-  clients: Client[];
-  clientFilter: string | "todos";
-  onClientChange: (value: string | "todos") => void;
   statusFilter: BudgetStatus | "todos";
   onStatusChange: (value: BudgetStatus | "todos") => void;
   sortField: BudgetSortField;
@@ -24,9 +21,6 @@ interface BudgetFiltersProps {
 export function BudgetFilters({
   search,
   onSearchChange,
-  clients,
-  clientFilter,
-  onClientChange,
   statusFilter,
   onStatusChange,
   sortField,
@@ -42,20 +36,6 @@ export function BudgetFilters({
         placeholder="Buscar por número, título o cliente…"
         aria-label="Buscar presupuesto"
       />
-
-      <select
-        aria-label="Filtrar por cliente"
-        value={clientFilter}
-        onChange={(e) => onClientChange(e.target.value)}
-        className="rounded-sm border border-border bg-white px-3 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-      >
-        <option value="todos">Todos los clientes</option>
-        {clients.map((client) => (
-          <option key={client.id} value={client.id}>
-            {client.name}
-          </option>
-        ))}
-      </select>
 
       <select
         aria-label="Filtrar por estado"

@@ -12,7 +12,6 @@ import type { BudgetStatus } from "@/lib/types";
 export default function PresupuestosPage() {
   const { budgets, clients } = useDemoData();
   const [search, setSearch] = useState("");
-  const [clientFilter, setClientFilter] = useState<string | "todos">("todos");
   const [statusFilter, setStatusFilter] = useState<BudgetStatus | "todos">("todos");
   const [sortField, setSortField] = useState<BudgetSortField>("fecha");
   const [sortDir, setSortDir] = useState<BudgetSortDir>("desc");
@@ -20,12 +19,11 @@ export default function PresupuestosPage() {
   const filteredBudgets = useMemo(() => {
     const keyword = search.trim().toLowerCase();
     const filtered = budgets.filter((budget) => {
-      const matchesClient = clientFilter === "todos" || budget.clientId === clientFilter;
       const matchesStatus = statusFilter === "todos" || budget.status === statusFilter;
       const clientName = clients.find((c) => c.id === budget.clientId)?.name ?? "";
       const searchable = `${budget.id} ${budget.title} ${clientName}`.toLowerCase();
       const matchesSearch = searchable.includes(keyword);
-      return matchesSearch && matchesClient && matchesStatus;
+      return matchesSearch && matchesStatus;
     });
     return [...filtered].sort((a, b) => {
       const diff =
@@ -34,7 +32,7 @@ export default function PresupuestosPage() {
           : budgetTotal(a.lineItems) - budgetTotal(b.lineItems);
       return sortDir === "asc" ? diff : -diff;
     });
-  }, [budgets, clients, search, clientFilter, statusFilter, sortField, sortDir]);
+  }, [budgets, clients, search, statusFilter, sortField, sortDir]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -52,9 +50,6 @@ export default function PresupuestosPage() {
         <BudgetFilters
           search={search}
           onSearchChange={setSearch}
-          clients={clients}
-          clientFilter={clientFilter}
-          onClientChange={setClientFilter}
           statusFilter={statusFilter}
           onStatusChange={setStatusFilter}
           sortField={sortField}

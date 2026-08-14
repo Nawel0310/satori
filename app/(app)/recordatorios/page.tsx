@@ -14,27 +14,25 @@ import { Button } from "@/components/ui/Button";
 export default function RecordatoriosPage() {
   const { reminders, clients } = useDemoData();
   const [search, setSearch] = useState("");
-  const [clientFilter, setClientFilter] = useState<string | "todos">("todos");
   const [statusFilter, setStatusFilter] = useState<ReminderStatusFilter>("todos");
   const [sortDir, setSortDir] = useState<ReminderSortDir>("asc");
 
   const filteredReminders = useMemo(() => {
     const keyword = search.trim().toLowerCase();
     const filtered = reminders.filter((reminder) => {
-      const matchesClient = clientFilter === "todos" || reminder.clientId === clientFilter;
       const matchesStatus =
         statusFilter === "todos" ||
         (statusFilter === "hecho" ? reminder.done : !reminder.done);
       const clientName = clients.find((c) => c.id === reminder.clientId)?.name ?? "";
       const searchable = `${reminder.text} ${clientName}`.toLowerCase();
       const matchesSearch = searchable.includes(keyword);
-      return matchesSearch && matchesClient && matchesStatus;
+      return matchesSearch && matchesStatus;
     });
     return [...filtered].sort((a, b) => {
       const diff = new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
       return sortDir === "asc" ? diff : -diff;
     });
-  }, [reminders, clients, search, clientFilter, statusFilter, sortDir]);
+  }, [reminders, clients, search, statusFilter, sortDir]);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
@@ -52,13 +50,10 @@ export default function RecordatoriosPage() {
         <ReminderFilters
           search={search}
           onSearchChange={setSearch}
-          clients={clients}
-          clientFilter={clientFilter}
-          onClientChange={setClientFilter}
           statusFilter={statusFilter}
           onStatusChange={setStatusFilter}
           sortDir={sortDir}
-          onSortDirChange={setSortDir}
+          onSortDirToggle={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
         />
       </div>
 

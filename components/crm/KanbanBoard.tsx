@@ -10,10 +10,10 @@ const STAGES: PipelineStage[] = ["contacto", "propuesta", "en_proceso", "perdido
 
 interface KanbanBoardProps {
   search?: string;
-  clientFilter?: string | "todos";
+  boardRef?: React.Ref<HTMLDivElement>;
 }
 
-export function KanbanBoard({ search = "", clientFilter = "todos" }: KanbanBoardProps) {
+export function KanbanBoard({ search = "", boardRef }: KanbanBoardProps) {
   const { productions, clients, moveProductionStage } = useDemoData();
 
   function clientName(clientId: string) {
@@ -23,11 +23,10 @@ export function KanbanBoard({ search = "", clientFilter = "todos" }: KanbanBoard
   const keyword = search.trim().toLowerCase();
 
   return (
-    <div className="flex flex-wrap items-start gap-4">
+    <div ref={boardRef} className="flex flex-wrap items-start gap-4">
       {STAGES.map((stage) => {
         const stageProductions = productions.filter((p) => {
           if (p.stage !== stage) return false;
-          const matchesClient = clientFilter === "todos" || p.clientId === clientFilter;
           const searchable = [
             p.title,
             clientName(p.clientId),
@@ -36,8 +35,7 @@ export function KanbanBoard({ search = "", clientFilter = "todos" }: KanbanBoard
           ]
             .join(" ")
             .toLowerCase();
-          const matchesSearch = searchable.includes(keyword);
-          return matchesClient && matchesSearch;
+          return searchable.includes(keyword);
         });
         return (
           <KanbanColumn

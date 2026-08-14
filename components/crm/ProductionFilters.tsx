@@ -1,7 +1,7 @@
 "use client";
 
 import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
-import type { Client, PipelineStage, ProductionCategory } from "@/lib/types";
+import type { PipelineStage, ProductionCategory } from "@/lib/types";
 import { SearchInput } from "@/components/ui/SearchInput";
 
 export type ProductionSortDir = "asc" | "desc";
@@ -9,9 +9,6 @@ export type ProductionSortDir = "asc" | "desc";
 interface ProductionFiltersProps {
   search: string;
   onSearchChange: (value: string) => void;
-  clients: Client[];
-  clientFilter: string | "todos";
-  onClientChange: (value: string | "todos") => void;
   categoryFilter: ProductionCategory | "todas";
   onCategoryChange: (value: ProductionCategory | "todas") => void;
   stageFilter: PipelineStage | "todas";
@@ -23,9 +20,6 @@ interface ProductionFiltersProps {
 export function ProductionFilters({
   search,
   onSearchChange,
-  clients,
-  clientFilter,
-  onClientChange,
   categoryFilter,
   onCategoryChange,
   stageFilter,
@@ -41,20 +35,6 @@ export function ProductionFilters({
         placeholder="Buscar por título, cliente, categoría o etapa…"
         aria-label="Buscar producción"
       />
-
-      <select
-        aria-label="Filtrar por cliente"
-        value={clientFilter}
-        onChange={(e) => onClientChange(e.target.value)}
-        className="rounded-sm border border-border bg-white px-3 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-      >
-        <option value="todos">Todos los clientes</option>
-        {clients.map((client) => (
-          <option key={client.id} value={client.id}>
-            {client.name}
-          </option>
-        ))}
-      </select>
 
       <select
         aria-label="Filtrar por categoría"

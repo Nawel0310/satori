@@ -61,30 +61,34 @@ export function BudgetForm({ initialBudget, onSubmit, onCancel }: BudgetFormProp
 
   return (
     <Card className="flex flex-col gap-6 p-6">
-      <SearchSelect
-        label="Cliente"
-        options={clients.map((client) => ({ id: client.id, label: client.name }))}
-        value={clientId}
-        onChange={handleClientChange}
-        searchPlaceholder="Buscar cliente…"
-      />
+      <div className="flex flex-col gap-5 sm:flex-row">
+        <div className="sm:w-[70%]">
+          <SearchSelect
+            label="Cliente"
+            options={clients.map((client) => ({ id: client.id, label: client.name }))}
+            value={clientId}
+            onChange={handleClientChange}
+            searchPlaceholder="Buscar cliente…"
+          />
+        </div>
 
-      <div className="flex flex-col gap-1.5 sm:w-48">
-        <label htmlFor="status-select" className="text-sm font-medium text-primary">
-          Estado
-        </label>
-        <select
-          id="status-select"
-          value={status}
-          onChange={(e) => setStatus(e.target.value as BudgetStatus)}
-          className="w-full rounded-sm border border-border bg-white px-3.5 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          {Object.entries(BUDGET_STATUS_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
+        <div className="flex flex-col gap-1.5 sm:w-[30%]">
+          <label htmlFor="status-select" className="text-sm font-medium text-primary">
+            Estado
+          </label>
+          <select
+            id="status-select"
+            value={status}
+            onChange={(e) => setStatus(e.target.value as BudgetStatus)}
+            className="w-full rounded-sm border border-border bg-white px-3.5 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+          >
+            {Object.entries(BUDGET_STATUS_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <SearchSelect
@@ -95,6 +99,7 @@ export function BudgetForm({ initialBudget, onSubmit, onCancel }: BudgetFormProp
         searchPlaceholder="Buscar producción…"
         emptyMessage="Este cliente no tiene producciones cargadas."
         placeholder="Sin producción asociada"
+        showAllOnFocus
       />
 
       {selectedProduction ? (

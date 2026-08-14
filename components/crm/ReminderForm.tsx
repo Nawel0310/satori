@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { SearchSelect } from "@/components/ui/SearchSelect";
 import type { Client, Reminder } from "@/lib/types";
 
 interface ReminderFormProps {
@@ -29,23 +30,13 @@ export function ReminderForm({ clients, defaultClientId, initialReminder, onSubm
 
   return (
     <Card className="flex flex-col gap-6 p-6">
-      <div className="flex flex-col gap-1.5">
-        <label htmlFor="reminder-client" className="text-sm font-medium text-primary">
-          Cliente
-        </label>
-        <select
-          id="reminder-client"
-          value={clientId}
-          onChange={(e) => setClientId(e.target.value)}
-          className="w-full rounded-sm border border-border bg-white px-3.5 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          {clients.map((client) => (
-            <option key={client.id} value={client.id}>
-              {client.name}
-            </option>
-          ))}
-        </select>
-      </div>
+      <SearchSelect
+        label="Cliente"
+        options={clients.map((client) => ({ id: client.id, label: client.name }))}
+        value={clientId}
+        onChange={setClientId}
+        searchPlaceholder="Buscar cliente…"
+      />
 
       <Input
         label="Recordatorio"
