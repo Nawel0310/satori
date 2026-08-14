@@ -11,19 +11,21 @@ import type { ClientType, PipelineStage } from "@/lib/types";
 export default function CrmPage() {
   const { clients, productions } = useDemoData();
   const [search, setSearch] = useState("");
+  const [clientFilter, setClientFilter] = useState<string | "todos">("todos");
   const [typeFilter, setTypeFilter] = useState<ClientType | "todos">("todos");
   const [stageFilter, setStageFilter] = useState<PipelineStage | "todas">("todas");
 
   const filteredClients = useMemo(() => {
     return clients.filter((client) => {
       const matchesSearch = client.name.toLowerCase().includes(search.trim().toLowerCase());
+      const matchesClient = clientFilter === "todos" || client.id === clientFilter;
       const matchesType = typeFilter === "todos" || client.type === typeFilter;
       const clientProduction = productions.find((p) => p.clientId === client.id);
       const matchesStage =
         stageFilter === "todas" || (clientProduction && clientProduction.stage === stageFilter);
-      return matchesSearch && matchesType && matchesStage;
+      return matchesSearch && matchesClient && matchesType && matchesStage;
     });
-  }, [clients, productions, search, typeFilter, stageFilter]);
+  }, [clients, productions, search, clientFilter, typeFilter, stageFilter]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -43,6 +45,9 @@ export default function CrmPage() {
         <ClientFilters
           search={search}
           onSearchChange={setSearch}
+          clients={clients}
+          clientFilter={clientFilter}
+          onClientChange={setClientFilter}
           typeFilter={typeFilter}
           onTypeChange={setTypeFilter}
           stageFilter={stageFilter}

@@ -2,10 +2,13 @@
 
 import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
 import type { Client, PipelineStage, ProductionCategory } from "@/lib/types";
+import { SearchInput } from "@/components/ui/SearchInput";
 
 export type ProductionSortDir = "asc" | "desc";
 
 interface ProductionFiltersProps {
+  search: string;
+  onSearchChange: (value: string) => void;
   clients: Client[];
   clientFilter: string | "todos";
   onClientChange: (value: string | "todos") => void;
@@ -18,6 +21,8 @@ interface ProductionFiltersProps {
 }
 
 export function ProductionFilters({
+  search,
+  onSearchChange,
   clients,
   clientFilter,
   onClientChange,
@@ -30,6 +35,13 @@ export function ProductionFilters({
 }: ProductionFiltersProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+      <SearchInput
+        value={search}
+        onChange={onSearchChange}
+        placeholder="Buscar por título, cliente, categoría o etapa…"
+        aria-label="Buscar producción"
+      />
+
       <select
         aria-label="Filtrar por cliente"
         value={clientFilter}

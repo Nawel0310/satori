@@ -10,12 +10,13 @@ import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 import { ProductionFilters, type ProductionSortDir } from "@/components/crm/ProductionFilters";
 import { CategoryBadge } from "@/components/crm/CategoryBadge";
 import { StageBadge } from "@/components/crm/StageBadge";
-import { formatDate } from "@/lib/format";
+import { formatDate, PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
 import type { PipelineStage, ProductionCategory } from "@/lib/types";
 
 export default function ProduccionesPage() {
   const { productions, clients, deleteProduction } = useDemoData();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
   const [clientFilter, setClientFilter] = useState<string | "todos">("todos");
   const [categoryFilter, setCategoryFilter] = useState<ProductionCategory | "todas">("todas");
   const [stageFilter, setStageFilter] = useState<PipelineStage | "todas">("todas");
@@ -26,11 +27,21 @@ export default function ProduccionesPage() {
   }
 
   const filteredProductions = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
     const filtered = productions.filter((production) => {
       const matchesClient = clientFilter === "todos" || production.clientId === clientFilter;
       const matchesCategory = categoryFilter === "todas" || production.category === categoryFilter;
       const matchesStage = stageFilter === "todas" || production.stage === stageFilter;
-      return matchesClient && matchesCategory && matchesStage;
+      const searchable = [
+        production.title,
+        clients.find((c) => c.id === production.clientId)?.name ?? "",
+        PRODUCTION_CATEGORY_LABELS[production.category],
+        PIPELINE_STAGE_LABELS[production.stage],
+      ]
+        .join(" ")
+        .toLowerCase();
+      const matchesSearch = searchable.includes(keyword);
+      return matchesSearch && matchesClient && matchesCategory && matchesStage;
     });
     return [...filtered].sort((a, b) => {
       if (!a.startDate && !b.startDate) return 0;
@@ -39,7 +50,7 @@ export default function ProduccionesPage() {
       const diff = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
       return sortDir === "asc" ? diff : -diff;
     });
-  }, [productions, clientFilter, categoryFilter, stageFilter, sortDir]);
+  }, [productions, clients, search, clientFilter, categoryFilter, stageFilter, sortDir]);
 
   const pendingProduction = productions.find((p) => p.id === pendingDeleteId);
 
@@ -57,6 +68,8 @@ export default function ProduccionesPage() {
 
       <div className="mb-6">
         <ProductionFilters
+          search={search}
+          onSearchChange={setSearch}
           clients={clients}
           clientFilter={clientFilter}
           onClientChange={setClientFilter}

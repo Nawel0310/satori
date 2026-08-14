@@ -1,11 +1,14 @@
 "use client";
 
 import type { Client } from "@/lib/types";
+import { SearchInput } from "@/components/ui/SearchInput";
 
 export type ReminderSortDir = "asc" | "desc";
 export type ReminderStatusFilter = "todos" | "pendiente" | "hecho";
 
 interface ReminderFiltersProps {
+  search: string;
+  onSearchChange: (value: string) => void;
   clients: Client[];
   clientFilter: string | "todos";
   onClientChange: (value: string | "todos") => void;
@@ -16,6 +19,8 @@ interface ReminderFiltersProps {
 }
 
 export function ReminderFilters({
+  search,
+  onSearchChange,
   clients,
   clientFilter,
   onClientChange,
@@ -26,6 +31,13 @@ export function ReminderFilters({
 }: ReminderFiltersProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+      <SearchInput
+        value={search}
+        onChange={onSearchChange}
+        placeholder="Buscar por texto o cliente…"
+        aria-label="Buscar recordatorio"
+      />
+
       <select
         aria-label="Filtrar por cliente"
         value={clientFilter}

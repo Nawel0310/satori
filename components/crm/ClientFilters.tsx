@@ -1,12 +1,15 @@
 "use client";
 
-import type { ChangeEvent } from "react";
 import { CLIENT_TYPE_LABELS, PIPELINE_STAGE_LABELS } from "@/lib/format";
-import type { ClientType, PipelineStage } from "@/lib/types";
+import type { Client, ClientType, PipelineStage } from "@/lib/types";
+import { SearchInput } from "@/components/ui/SearchInput";
 
 interface ClientFiltersProps {
   search: string;
   onSearchChange: (value: string) => void;
+  clients: Client[];
+  clientFilter: string | "todos";
+  onClientChange: (value: string | "todos") => void;
   typeFilter: ClientType | "todos";
   onTypeChange: (value: ClientType | "todos") => void;
   stageFilter: PipelineStage | "todas";
@@ -16,6 +19,9 @@ interface ClientFiltersProps {
 export function ClientFilters({
   search,
   onSearchChange,
+  clients,
+  clientFilter,
+  onClientChange,
   typeFilter,
   onTypeChange,
   stageFilter,
@@ -23,32 +29,26 @@ export function ClientFilters({
 }: ClientFiltersProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-      <div className="relative flex-1">
-        <label htmlFor="client-search" className="sr-only">
-          Buscar cliente o agencia
-        </label>
-        <svg
-          aria-hidden="true"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.8"
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-secondary"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.3-4.3" />
-        </svg>
-        <input
-          id="client-search"
-          type="text"
-          value={search}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => onSearchChange(e.target.value)}
-          placeholder="Buscar cliente o agencia…"
-          className="w-full rounded-sm border border-border bg-white py-2.5 pl-9 pr-3 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
-        />
-      </div>
+      <SearchInput
+        value={search}
+        onChange={onSearchChange}
+        placeholder="Buscar cliente o agencia…"
+        aria-label="Buscar cliente o agencia"
+      />
+
+      <select
+        aria-label="Filtrar por cliente"
+        value={clientFilter}
+        onChange={(e) => onClientChange(e.target.value)}
+        className="rounded-sm border border-border bg-white px-3 py-2.5 text-sm text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        <option value="todos">Todos los clientes</option>
+        {clients.map((client) => (
+          <option key={client.id} value={client.id}>
+            {client.name}
+          </option>
+        ))}
+      </select>
 
       <select
         aria-label="Filtrar por tipo de cliente"

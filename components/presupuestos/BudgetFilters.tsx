@@ -2,11 +2,14 @@
 
 import { BUDGET_STATUS_LABELS } from "@/lib/format";
 import type { BudgetStatus, Client } from "@/lib/types";
+import { SearchInput } from "@/components/ui/SearchInput";
 
 export type BudgetSortField = "fecha" | "monto";
 export type BudgetSortDir = "asc" | "desc";
 
 interface BudgetFiltersProps {
+  search: string;
+  onSearchChange: (value: string) => void;
   clients: Client[];
   clientFilter: string | "todos";
   onClientChange: (value: string | "todos") => void;
@@ -19,6 +22,8 @@ interface BudgetFiltersProps {
 }
 
 export function BudgetFilters({
+  search,
+  onSearchChange,
   clients,
   clientFilter,
   onClientChange,
@@ -31,6 +36,13 @@ export function BudgetFilters({
 }: BudgetFiltersProps) {
   return (
     <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+      <SearchInput
+        value={search}
+        onChange={onSearchChange}
+        placeholder="Buscar por número, título o cliente…"
+        aria-label="Buscar presupuesto"
+      />
+
       <select
         aria-label="Filtrar por cliente"
         value={clientFilter}

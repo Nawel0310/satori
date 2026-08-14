@@ -11,16 +11,21 @@ import type { BudgetStatus } from "@/lib/types";
 
 export default function PresupuestosPage() {
   const { budgets, clients } = useDemoData();
+  const [search, setSearch] = useState("");
   const [clientFilter, setClientFilter] = useState<string | "todos">("todos");
   const [statusFilter, setStatusFilter] = useState<BudgetStatus | "todos">("todos");
   const [sortField, setSortField] = useState<BudgetSortField>("fecha");
   const [sortDir, setSortDir] = useState<BudgetSortDir>("desc");
 
   const filteredBudgets = useMemo(() => {
+    const keyword = search.trim().toLowerCase();
     const filtered = budgets.filter((budget) => {
       const matchesClient = clientFilter === "todos" || budget.clientId === clientFilter;
       const matchesStatus = statusFilter === "todos" || budget.status === statusFilter;
-      return matchesClient && matchesStatus;
+      const clientName = clients.find((c) => c.id === budget.clientId)?.name ?? "";
+      const searchable = `${budget.id} ${budget.title} ${clientName}`.toLowerCase();
+      const matchesSearch = searchable.includes(keyword);
+      return matchesSearch && matchesClient && matchesStatus;
     });
     return [...filtered].sort((a, b) => {
       const diff =
@@ -29,7 +34,7 @@ export default function PresupuestosPage() {
           : budgetTotal(a.lineItems) - budgetTotal(b.lineItems);
       return sortDir === "asc" ? diff : -diff;
     });
-  }, [budgets, clientFilter, statusFilter, sortField, sortDir]);
+  }, [budgets, clients, search, clientFilter, statusFilter, sortField, sortDir]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -45,6 +50,8 @@ export default function PresupuestosPage() {
 
       <div className="mb-6">
         <BudgetFilters
+          search={search}
+          onSearchChange={setSearch}
           clients={clients}
           clientFilter={clientFilter}
           onClientChange={setClientFilter}
