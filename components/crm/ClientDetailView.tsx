@@ -36,12 +36,16 @@ export function ClientDetailView({ id }: { id: string }) {
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <Link href="/crm" className="inline-flex items-center gap-1.5 text-sm font-medium text-secondary hover:text-primary">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-secondary hover:text-primary"
+        >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
             <path d="m15 18-6-6 6-6" />
           </svg>
-          Volver al listado
-        </Link>
+          Volver
+        </button>
         <div className="flex gap-3">
           <Link href={`/crm/detalle/editar?id=${client.id}`}>
             <Button variant="secondary" icon={<PencilIcon />}>
