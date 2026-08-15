@@ -19,6 +19,28 @@ const icon = {
   strokeLinejoin: "round" as const,
 };
 
+const groupIcon = {
+  width: 28,
+  height: 28,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.6,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+};
+
+const subIcon = {
+  width: 22,
+  height: 22,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.6,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+};
+
 const STAGE_ORDER: PipelineStage[] = ["propuesta", "aprobada", "en_produccion", "finalizada", "cancelada"];
 
 const QUICK_GROUPS = [
@@ -27,7 +49,7 @@ const QUICK_GROUPS = [
     title: "Gestión Clientes",
     description: "Clientes y agencias",
     icon: (
-      <svg {...icon}>
+      <svg {...groupIcon}>
         <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
         <circle cx="10" cy="7" r="4" />
         <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
@@ -38,7 +60,7 @@ const QUICK_GROUPS = [
       href: "/recordatorios",
       title: "Recordatorios",
       icon: (
-        <svg {...icon}>
+        <svg {...subIcon}>
           <rect x="3" y="4" width="18" height="18" rx="2" />
           <path d="M16 2v4M8 2v4M3 10h18" />
           <path d="m9 16 2 2 4-4" />
@@ -51,7 +73,7 @@ const QUICK_GROUPS = [
     title: "Producciones",
     description: "Todas las producciones",
     icon: (
-      <svg {...icon}>
+      <svg {...groupIcon}>
         <rect x="2" y="4" width="20" height="16" rx="2" />
         <path d="m10 9 5 3-5 3z" />
       </svg>
@@ -60,7 +82,7 @@ const QUICK_GROUPS = [
       href: "/embudo",
       title: "Embudo",
       icon: (
-        <svg {...icon}>
+        <svg {...subIcon}>
           <path d="M22 3H2l8 9.46V19l4 2v-8.54z" />
         </svg>
       ),
@@ -71,7 +93,7 @@ const QUICK_GROUPS = [
     title: "Presupuestos",
     description: "Armar y enviar",
     icon: (
-      <svg {...icon}>
+      <svg {...groupIcon}>
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
         <path d="M14 2v6h6" />
         <path d="M9 13h6M9 17h6" />
@@ -81,7 +103,7 @@ const QUICK_GROUPS = [
       href: "/plantillas",
       title: "Plantillas",
       icon: (
-        <svg {...icon}>
+        <svg {...subIcon}>
           <rect x="9" y="9" width="13" height="13" rx="2" />
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
         </svg>
@@ -149,28 +171,28 @@ export default function DashboardPage() {
       </section>
 
       <section className="mt-10">
-        <h2 className="font-heading text-lg font-semibold text-primary">Accesos rápidos</h2>
+        <h2 className="font-heading text-2xl font-bold text-primary">Accesos rápidos</h2>
         <div className="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-3">
           {QUICK_GROUPS.map((group) => (
             <Card key={group.href} className="p-5">
               <Link
                 href={group.href}
-                className="-m-2 flex items-center gap-3 rounded-sm p-2 transition-colors duration-200 hover:bg-surface"
+                className="-m-2 flex items-center gap-4 rounded-sm p-2 transition-colors duration-200 hover:bg-surface"
               >
                 <span aria-hidden="true" className="text-primary/70">
                   {group.icon}
                 </span>
                 <span>
-                  <span className="block font-heading text-sm font-semibold uppercase tracking-wide text-primary">
+                  <span className="block font-heading text-lg font-semibold uppercase tracking-wide text-primary">
                     {group.title}
                   </span>
-                  <span className="block text-xs text-secondary">{group.description}</span>
+                  <span className="block text-sm text-secondary">{group.description}</span>
                 </span>
               </Link>
               <div className="ml-6 mt-3 flex flex-col gap-1 border-l border-border pl-3">
                 <Link
                   href={group.sub.href}
-                  className="-my-1 flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm font-medium text-secondary transition-colors duration-200 hover:bg-surface hover:text-primary"
+                  className="-my-1 flex items-center gap-2.5 rounded-sm px-2 py-1.5 text-base font-medium text-secondary transition-colors duration-200 hover:bg-surface hover:text-primary"
                 >
                   <span aria-hidden="true">{group.sub.icon}</span>
                   {group.sub.title}
