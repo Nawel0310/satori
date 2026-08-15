@@ -7,6 +7,7 @@ import { useDemoData } from "@/context/demo-data-context";
 import { ClientCard } from "@/components/crm/ClientCard";
 import { InteractionTimeline } from "@/components/crm/InteractionTimeline";
 import { Card } from "@/components/ui/Card";
+import { BackButton } from "@/components/ui/BackButton";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { StatusBadge } from "@/components/presupuestos/StatusBadge";
@@ -36,16 +37,7 @@ export function ClientDetailView({ id }: { id: string }) {
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="inline-flex items-center gap-1.5 text-sm font-medium text-secondary hover:text-primary"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-          Volver
-        </button>
+        <BackButton />
         <div className="flex gap-3">
           <Link href={`/crm/detalle/editar?id=${client.id}`}>
             <Button variant="secondary" icon={<PencilIcon />}>

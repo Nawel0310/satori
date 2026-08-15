@@ -12,6 +12,14 @@ const baseProps = {
   "aria-hidden": true as const,
 };
 
+export function ChevronLeftIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg {...baseProps} {...props}>
+      <path d="m15 18-6-6 6-6" />
+    </svg>
+  );
+}
+
 export function EyeIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg {...baseProps} {...props}>
