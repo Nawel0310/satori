@@ -37,11 +37,11 @@ export const CLIENT_TYPE_LABELS: Record<ClientType, string> = {
 };
 
 export const PIPELINE_STAGE_LABELS: Record<PipelineStage, string> = {
-  contacto: "Contacto",
   propuesta: "Propuesta",
-  en_proceso: "Desarrollo",
-  perdido: "Perdido",
-  finalizada: "Finalizado",
+  aprobada: "Aprobada",
+  en_produccion: "Producción",
+  finalizada: "Finalizada",
+  cancelada: "Cancelada",
 };
 
 export const PRODUCTION_CATEGORY_LABELS: Record<ProductionCategory, string> = {

@@ -51,7 +51,7 @@ Marcar esta línea es importante para que la demo no genere una expectativa que 
 
 ### 3.5 CRM — embudo de estados (Kanban arrastrable)
 - **Propósito:** el "ajá" visual del CRM — de un vistazo, en qué etapa está cada propuesta.
-- **UI:** 4 columnas — Contacto, Propuesta, Ganado, Perdido — con tarjetas de producción movibles entre columnas (drag & drop simulado, sin guardar en backend).
+- **UI:** 4 columnas — Propuesta, Aprobada, Producción, Cancelada — con tarjetas de producción movibles entre columnas (drag & drop simulado, sin guardar en backend).
 - **Datos de prueba:** repartir las 4-5 producciones de ejemplo entre las columnas para que el tablero no se vea vacío.
 
 ### 3.6 CRM — recordatorios / tareas

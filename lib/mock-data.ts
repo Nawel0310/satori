@@ -142,7 +142,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
     title: "Seguimiento mensual de obra, Torre Norte",
     description: "Registro mensual del avance de obra con dron, entrega los días 28 de cada mes.",
     category: "obra",
-    stage: "en_proceso",
+    stage: "en_produccion",
     startDate: "2026-08-28",
   },
   {
@@ -150,7 +150,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
     clientId: "cli-003",
     title: "Evento corporativo Banco Andes",
     category: "evento",
-    stage: "contacto",
+    stage: "propuesta",
     startDate: "2026-09-02",
   },
   {
@@ -166,7 +166,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
     clientId: "cli-005",
     title: "Cobertura Expo Rosario 2026",
     category: "evento",
-    stage: "en_proceso",
+    stage: "en_produccion",
     startDate: "2026-09-15",
   },
   {
@@ -174,7 +174,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
     clientId: "cli-006",
     title: "Drone + recorrido virtual",
     category: "drone",
-    stage: "perdido",
+    stage: "cancelada",
   },
 ];
 

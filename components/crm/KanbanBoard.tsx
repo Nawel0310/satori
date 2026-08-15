@@ -6,7 +6,7 @@ import type { PipelineStage } from "@/lib/types";
 import { KanbanColumn } from "./KanbanColumn";
 import { KanbanCard } from "./KanbanCard";
 
-const STAGES: PipelineStage[] = ["contacto", "propuesta", "en_proceso", "perdido"];
+const STAGES: PipelineStage[] = ["propuesta", "aprobada", "en_produccion", "cancelada"];
 
 interface KanbanBoardProps {
   search?: string;
@@ -46,7 +46,12 @@ export function KanbanBoard({ search = "", boardRef }: KanbanBoardProps) {
             onDropProduction={moveProductionStage}
           >
             {stageProductions.map((production) => (
-              <KanbanCard key={production.id} production={production} clientName={clientName(production.clientId)} />
+              <KanbanCard
+                key={production.id}
+                production={production}
+                clientName={clientName(production.clientId)}
+                onFinish={(id) => moveProductionStage(id, "finalizada")}
+              />
             ))}
           </KanbanColumn>
         );

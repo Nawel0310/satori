@@ -57,7 +57,7 @@ La sidebar (o el menú hamburguesa en mobile/tablet) da acceso a todo — no hac
 1. **Login** → transmite que el sistema es privado y profesional.
 2. **Dashboard** → panorama general en 5 segundos: producciones activas, presupuestos pendientes, recordatorios del día.
 3. **Gestión Clientes → listado y ficha** → "acá está cada cliente, con todo su historial".
-4. **Gestión Clientes → Embudo** → mover una tarjeta en vivo entre columnas (Contacto/Propuesta/Ganado/Perdido).
+4. **Gestión Clientes → Embudo** → mover una tarjeta en vivo entre columnas (Propuesta/Aprobada/Producción/Cancelada).
 5. **Presupuestos → Nuevo** → armar un presupuesto en minutos usando una plantilla reutilizable.
 6. **Presupuestos → Ver (vista cliente) → Aprobar** → mostrar que el estado cambia en vivo en el listado, sin recargar nada.
 

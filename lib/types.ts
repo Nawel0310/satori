@@ -1,4 +1,4 @@
-export type PipelineStage = "contacto" | "propuesta" | "en_proceso" | "perdido" | "finalizada";
+export type PipelineStage = "propuesta" | "aprobada" | "en_produccion" | "finalizada" | "cancelada";
 
 export type ClientType =
   | "inmobiliaria"

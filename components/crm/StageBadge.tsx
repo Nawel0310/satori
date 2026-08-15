@@ -2,11 +2,11 @@ import type { PipelineStage } from "@/lib/types";
 import { PIPELINE_STAGE_LABELS } from "@/lib/format";
 
 const STAGE_STYLES: Record<PipelineStage, string> = {
-  contacto: "border-secondary text-secondary",
   propuesta: "border-accent text-accent",
-  en_proceso: "border-primary bg-primary text-white",
-  perdido: "border-secondary/50 text-secondary/70 line-through decoration-1",
+  aprobada: "border-primary text-primary",
+  en_produccion: "border-primary bg-primary text-white",
   finalizada: "border-secondary bg-surface text-secondary",
+  cancelada: "border-secondary/50 text-secondary/70 line-through decoration-1",
 };
 
 export function StageBadge({ stage }: { stage: PipelineStage }) {

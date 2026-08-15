@@ -30,7 +30,7 @@ export function ProductionForm({
   const [title, setTitle] = useState(initialProduction?.title ?? "");
   const [description, setDescription] = useState(initialProduction?.description ?? "");
   const [category, setCategory] = useState<ProductionCategory>(initialProduction?.category ?? "drone");
-  const [stage, setStage] = useState<PipelineStage>(initialProduction?.stage ?? "contacto");
+  const [stage, setStage] = useState<PipelineStage>(initialProduction?.stage ?? "propuesta");
   const [startDate, setStartDate] = useState(initialProduction?.startDate ?? "");
 
   function handleSubmit() {
