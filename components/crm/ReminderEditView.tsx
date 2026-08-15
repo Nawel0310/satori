@@ -30,7 +30,7 @@ export function ReminderEditView({ id }: { id: string }) {
         onCancel={() => router.back()}
         onSubmit={(input) => {
           updateReminder(reminder.id, input);
-          router.push("/recordatorios");
+          router.back();
         }}
       />
     </div>

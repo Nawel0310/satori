@@ -24,7 +24,7 @@ export default function NuevaProduccionPage() {
         onCancel={() => router.back()}
         onSubmit={(input) => {
           addProduction(input);
-          router.push("/producciones");
+          router.back();
         }}
       />
     </div>

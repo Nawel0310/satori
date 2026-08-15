@@ -29,7 +29,7 @@ export function ClientEditView({ id }: { id: string }) {
         onCancel={() => router.back()}
         onSubmit={(input) => {
           updateClient(client.id, input);
-          router.push(`/crm/detalle?id=${client.id}`);
+          router.back();
         }}
       />
     </div>

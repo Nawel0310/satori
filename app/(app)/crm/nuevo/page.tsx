@@ -22,8 +22,8 @@ export default function NuevoClientePage() {
       <ClientForm
         onCancel={() => router.back()}
         onSubmit={(input) => {
-          const id = addClient(input);
-          router.push(`/crm/detalle?id=${id}`);
+          addClient(input);
+          router.back();
         }}
       />
     </div>

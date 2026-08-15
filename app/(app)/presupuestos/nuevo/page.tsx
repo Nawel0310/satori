@@ -23,7 +23,7 @@ export default function NuevoPresupuestoPage() {
         onCancel={() => router.back()}
         onSubmit={(budget) => {
           addBudget(budget);
-          router.push(`/presupuestos/cliente?id=${budget.id}`);
+          router.back();
         }}
       />
     </div>

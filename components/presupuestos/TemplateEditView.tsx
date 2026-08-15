@@ -29,7 +29,7 @@ export function TemplateEditView({ id }: { id: string }) {
         onCancel={() => router.back()}
         onSubmit={(input) => {
           updateTemplate(template.id, input);
-          router.push("/plantillas");
+          router.back();
         }}
       />
     </div>

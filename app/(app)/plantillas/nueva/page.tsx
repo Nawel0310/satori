@@ -23,7 +23,7 @@ export default function NuevaPlantillaPage() {
         onCancel={() => router.back()}
         onSubmit={(input) => {
           addTemplate(input);
-          router.push("/plantillas");
+          router.back();
         }}
       />
     </div>

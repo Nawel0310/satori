@@ -30,7 +30,7 @@ export function ProductionEditView({ id }: { id: string }) {
         onCancel={() => router.back()}
         onSubmit={(input) => {
           updateProduction(production.id, input);
-          router.push("/producciones");
+          router.back();
         }}
       />
     </div>
