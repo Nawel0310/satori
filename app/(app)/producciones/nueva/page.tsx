@@ -21,7 +21,7 @@ export default function NuevaProduccionPage() {
 
       <ProductionForm
         clients={clients}
-        onCancel={() => router.push("/producciones")}
+        onCancel={() => router.back()}
         onSubmit={(input) => {
           addProduction(input);
           router.push("/producciones");

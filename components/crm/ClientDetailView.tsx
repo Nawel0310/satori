@@ -58,7 +58,7 @@ export function ClientDetailView({ id }: { id: string }) {
         onCancel={() => setConfirmingDelete(false)}
         onConfirm={() => {
           deleteClient(client.id);
-          router.push("/crm");
+          router.back();
         }}
       />
 

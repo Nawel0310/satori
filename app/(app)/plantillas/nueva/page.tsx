@@ -20,7 +20,7 @@ export default function NuevaPlantillaPage() {
       </header>
 
       <TemplateForm
-        onCancel={() => router.push("/plantillas")}
+        onCancel={() => router.back()}
         onSubmit={(input) => {
           addTemplate(input);
           router.push("/plantillas");

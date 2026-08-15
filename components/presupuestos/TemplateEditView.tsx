@@ -26,7 +26,7 @@ export function TemplateEditView({ id }: { id: string }) {
 
       <TemplateForm
         initialTemplate={template}
-        onCancel={() => router.push("/plantillas")}
+        onCancel={() => router.back()}
         onSubmit={(input) => {
           updateTemplate(template.id, input);
           router.push("/plantillas");

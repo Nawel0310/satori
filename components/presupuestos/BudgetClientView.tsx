@@ -69,7 +69,7 @@ export function BudgetClientView({ id }: { id: string }) {
         onCancel={() => setConfirmingDelete(false)}
         onConfirm={() => {
           deleteBudget(budget.id);
-          router.push("/presupuestos");
+          router.back();
         }}
       />
 

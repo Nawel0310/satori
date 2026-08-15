@@ -47,7 +47,7 @@ export function ReminderDetailView({ id }: { id: string }) {
         onCancel={() => setConfirmingDelete(false)}
         onConfirm={() => {
           deleteReminder(reminder.id);
-          router.push("/recordatorios");
+          router.back();
         }}
       />
 

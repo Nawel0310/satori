@@ -51,7 +51,7 @@ export function ProductionDetailView({ id }: { id: string }) {
         onCancel={() => setConfirmingDelete(false)}
         onConfirm={() => {
           deleteProduction(production.id);
-          router.push("/producciones");
+          router.back();
         }}
       />
 

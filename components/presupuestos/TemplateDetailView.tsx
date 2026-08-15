@@ -47,7 +47,7 @@ export function TemplateDetailView({ id }: { id: string }) {
         onCancel={() => setConfirmingDelete(false)}
         onConfirm={() => {
           deleteTemplate(template.id);
-          router.push("/plantillas");
+          router.back();
         }}
       />
 

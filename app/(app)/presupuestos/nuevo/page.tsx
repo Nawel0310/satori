@@ -20,7 +20,7 @@ export default function NuevoPresupuestoPage() {
       </header>
 
       <BudgetForm
-        onCancel={() => router.push("/presupuestos")}
+        onCancel={() => router.back()}
         onSubmit={(budget) => {
           addBudget(budget);
           router.push(`/presupuestos/cliente?id=${budget.id}`);

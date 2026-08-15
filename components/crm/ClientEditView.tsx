@@ -26,7 +26,7 @@ export function ClientEditView({ id }: { id: string }) {
 
       <ClientForm
         initialClient={client}
-        onCancel={() => router.push(`/crm/detalle?id=${client.id}`)}
+        onCancel={() => router.back()}
         onSubmit={(input) => {
           updateClient(client.id, input);
           router.push(`/crm/detalle?id=${client.id}`);

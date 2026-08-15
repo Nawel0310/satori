@@ -21,7 +21,7 @@ export default function NuevoRecordatorioPage() {
 
       <ReminderForm
         clients={clients}
-        onCancel={() => router.push("/recordatorios")}
+        onCancel={() => router.back()}
         onSubmit={(input) => {
           addReminder(input);
           router.push("/recordatorios");

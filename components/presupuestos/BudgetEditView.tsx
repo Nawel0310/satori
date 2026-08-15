@@ -26,7 +26,7 @@ export function BudgetEditView({ id }: { id: string }) {
 
       <BudgetForm
         initialBudget={budget}
-        onCancel={() => router.push(`/presupuestos/cliente?id=${budget.id}`)}
+        onCancel={() => router.back()}
         onSubmit={(updated) => {
           updateBudget(budget.id, updated);
           router.push(`/presupuestos/cliente?id=${budget.id}`);
