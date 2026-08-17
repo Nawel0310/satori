@@ -27,7 +27,7 @@ import type {
   Production,
   Reminder,
 } from "@/lib/types";
-import { SendIcon } from "@/components/ui/icons";
+import { CheckCircleIcon, SendIcon } from "@/components/ui/icons";
 
 interface DemoDataState {
   clients: Client[];
@@ -265,7 +265,7 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
   const [toast, setToast] = useState<ToastState | null>(null);
   const toastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const showToast = (message: string, icon?: ReactNode) => {
+  const showToast = (message: string, icon: ReactNode = <CheckCircleIcon />) => {
     if (toastTimeout.current) clearTimeout(toastTimeout.current);
     setToast({ message, icon });
     toastTimeout.current = setTimeout(() => setToast(null), 2500);
