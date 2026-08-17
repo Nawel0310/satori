@@ -3,12 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useDemoData } from "@/context/demo-data-context";
-import type { Budget, Client } from "@/lib/types";
-import { budgetTotal, formatCurrency, formatDate } from "@/lib/format";
+import type { Budget, BudgetStatus, Client } from "@/lib/types";
+import { budgetTotal, BUDGET_STATUS_LABELS, formatCurrency, formatDate } from "@/lib/format";
 import { StatusBadge } from "./StatusBadge";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { RowAction } from "@/components/ui/RowAction";
+import { InlineEditSelect } from "@/components/ui/InlineEditSelect";
 import { PencilIcon, TrashIcon } from "@/components/ui/icons";
+
+const STATUS_OPTIONS = Object.entries(BUDGET_STATUS_LABELS).map(([value, label]) => ({ value, label }));
 
 interface BudgetTableProps {
   budgets: Budget[];
@@ -16,7 +19,7 @@ interface BudgetTableProps {
 }
 
 export function BudgetTable({ budgets, clients }: BudgetTableProps) {
-  const { deleteBudget } = useDemoData();
+  const { updateBudget, deleteBudget } = useDemoData();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   function client(clientId: string) {
@@ -88,7 +91,12 @@ export function BudgetTable({ budgets, clients }: BudgetTableProps) {
                   {formatCurrency(budgetTotal(budget.lineItems))}
                 </td>
                 <td className="px-5 py-4">
-                  <StatusBadge status={budget.status} />
+                  <InlineEditSelect
+                    value={budget.status}
+                    options={STATUS_OPTIONS}
+                    onChange={(newValue) => updateBudget(budget.id, { status: newValue as BudgetStatus })}
+                    badge={<StatusBadge status={budget.status} />}
+                  />
                 </td>
                 <td className="px-5 py-4">
                   <div className="flex justify-end gap-2">

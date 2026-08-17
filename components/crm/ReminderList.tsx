@@ -8,13 +8,19 @@ import type { Reminder } from "@/lib/types";
 import { RowAction } from "@/components/ui/RowAction";
 import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { InlineEditSelect } from "@/components/ui/InlineEditSelect";
 
 interface ReminderListProps {
   reminders: Reminder[];
 }
 
+const REMINDER_STATUS_OPTIONS = [
+  { value: "pendiente", label: "Pendiente" },
+  { value: "hecho", label: "Hecho" },
+];
+
 export function ReminderList({ reminders }: ReminderListProps) {
-  const { clients, toggleReminder, deleteReminder } = useDemoData();
+  const { clients, toggleReminder, updateReminder, deleteReminder } = useDemoData();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   function clientName(clientId: string) {
@@ -88,13 +94,20 @@ export function ReminderList({ reminders }: ReminderListProps) {
                 </td>
                 <td className="px-5 py-4 text-secondary">{formatDate(reminder.dueDate)}</td>
                 <td className="px-5 py-4">
-                  <span
-                    className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
-                      reminder.done ? "bg-surface text-secondary" : "border border-accent text-accent"
-                    }`}
-                  >
-                    {reminder.done ? "Hecho" : "Pendiente"}
-                  </span>
+                  <InlineEditSelect
+                    value={reminder.done ? "hecho" : "pendiente"}
+                    options={REMINDER_STATUS_OPTIONS}
+                    onChange={(newValue) => updateReminder(reminder.id, { done: newValue === "hecho" })}
+                    badge={
+                      <span
+                        className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+                          reminder.done ? "bg-surface text-secondary" : "border border-accent text-accent"
+                        }`}
+                      >
+                        {reminder.done ? "Hecho" : "Pendiente"}
+                      </span>
+                    }
+                  />
                 </td>
                 <td className="px-5 py-4">
                   <div className="flex justify-end gap-2">

@@ -1,6 +1,15 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useReducer, useRef, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   INITIAL_BUDGETS,
   INITIAL_BUDGET_TEMPLATES,
@@ -18,6 +27,7 @@ import type {
   Production,
   Reminder,
 } from "@/lib/types";
+import { SendIcon } from "@/components/ui/icons";
 
 interface DemoDataState {
   clients: Client[];
@@ -213,7 +223,13 @@ function demoDataReducer(state: DemoDataState, action: Action): DemoDataState {
   }
 }
 
+interface ToastState {
+  message: string;
+  icon?: ReactNode;
+}
+
 interface DemoDataContextValue extends DemoDataState {
+  toast: ToastState | null;
   moveProductionStage: (productionId: string, stage: PipelineStage) => void;
   setBudgetStatus: (budgetId: string, status: BudgetStatus) => void;
   approveBudget: (budgetId: string) => void;
@@ -246,6 +262,20 @@ const DemoDataContext = createContext<DemoDataContextValue | null>(null);
 export function DemoDataProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(demoDataReducer, initialState);
   const isFirstPersist = useRef(true);
+  const [toast, setToast] = useState<ToastState | null>(null);
+  const toastTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = (message: string, icon?: ReactNode) => {
+    if (toastTimeout.current) clearTimeout(toastTimeout.current);
+    setToast({ message, icon });
+    toastTimeout.current = setTimeout(() => setToast(null), 2500);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (toastTimeout.current) clearTimeout(toastTimeout.current);
+    };
+  }, []);
 
   useEffect(() => {
     const persisted = loadPersistedState();
@@ -265,59 +295,107 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
   const value = useMemo<DemoDataContextValue>(
     () => ({
       ...state,
+      toast,
       moveProductionStage: (productionId, stage) =>
         dispatch({ type: "MOVE_PRODUCTION_STAGE", productionId, stage }),
       setBudgetStatus: (budgetId, status) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status }),
       approveBudget: (budgetId) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status: "aprobado" }),
       rejectBudget: (budgetId) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status: "vencido" }),
-      sendBudgetEmail: (budgetId) =>
-        dispatch({ type: "UPDATE_BUDGET", budgetId, patch: { emailSentAt: new Date().toISOString() } }),
+      sendBudgetEmail: (budgetId) => {
+        dispatch({ type: "UPDATE_BUDGET", budgetId, patch: { emailSentAt: new Date().toISOString() } });
+        showToast("Presupuesto enviado por email.", <SendIcon />);
+      },
       toggleReminder: (reminderId) => dispatch({ type: "TOGGLE_REMINDER", reminderId }),
       addReminder: (input) => {
         const id = `rem-${Date.now()}`;
         dispatch({ type: "ADD_REMINDER", reminder: { ...input, id, done: false } });
+        showToast("Se guardó el recordatorio.");
         return id;
       },
-      updateReminder: (reminderId, patch) => dispatch({ type: "UPDATE_REMINDER", reminderId, patch }),
-      deleteReminder: (reminderId) => dispatch({ type: "DELETE_REMINDER", reminderId }),
-      addNote: (clientId, text) =>
+      updateReminder: (reminderId, patch) => {
+        dispatch({ type: "UPDATE_REMINDER", reminderId, patch });
+        showToast("Se actualizó el recordatorio.");
+      },
+      deleteReminder: (reminderId) => {
+        dispatch({ type: "DELETE_REMINDER", reminderId });
+        showToast("Se eliminó el recordatorio.");
+      },
+      addNote: (clientId, text) => {
         dispatch({
           type: "ADD_NOTE",
           clientId,
           note: { id: `note-${Date.now()}`, date: new Date().toISOString().slice(0, 10), text },
-        }),
-      updateNote: (clientId, noteId, text) => dispatch({ type: "UPDATE_NOTE", clientId, noteId, text }),
-      deleteNote: (clientId, noteId) => dispatch({ type: "DELETE_NOTE", clientId, noteId }),
-      addBudget: (budget) => dispatch({ type: "ADD_BUDGET", budget }),
-      updateBudget: (budgetId, patch) => dispatch({ type: "UPDATE_BUDGET", budgetId, patch }),
-      deleteBudget: (budgetId) => dispatch({ type: "DELETE_BUDGET", budgetId }),
+        });
+        showToast("Se agregó la nota.");
+      },
+      updateNote: (clientId, noteId, text) => {
+        dispatch({ type: "UPDATE_NOTE", clientId, noteId, text });
+        showToast("Se actualizó la nota.");
+      },
+      deleteNote: (clientId, noteId) => {
+        dispatch({ type: "DELETE_NOTE", clientId, noteId });
+        showToast("Se eliminó la nota.");
+      },
+      addBudget: (budget) => {
+        dispatch({ type: "ADD_BUDGET", budget });
+        showToast("Se guardó el presupuesto.");
+      },
+      updateBudget: (budgetId, patch) => {
+        dispatch({ type: "UPDATE_BUDGET", budgetId, patch });
+        showToast("Se actualizó el presupuesto.");
+      },
+      deleteBudget: (budgetId) => {
+        dispatch({ type: "DELETE_BUDGET", budgetId });
+        showToast("Se eliminó el presupuesto.");
+      },
       addClient: (input) => {
         const id = `cli-${Date.now()}`;
         dispatch({ type: "ADD_CLIENT", client: { ...input, id, notes: [] } });
+        showToast("Se guardó el cliente.");
         return id;
       },
-      updateClient: (clientId, patch) => dispatch({ type: "UPDATE_CLIENT", clientId, patch }),
-      deleteClient: (clientId) => dispatch({ type: "DELETE_CLIENT", clientId }),
+      updateClient: (clientId, patch) => {
+        dispatch({ type: "UPDATE_CLIENT", clientId, patch });
+        showToast("Se actualizó el cliente.");
+      },
+      deleteClient: (clientId) => {
+        dispatch({ type: "DELETE_CLIENT", clientId });
+        showToast("Se eliminó el cliente.");
+      },
       addProduction: (input) => {
         const id = `prod-${Date.now()}`;
         dispatch({ type: "ADD_PRODUCTION", production: { ...input, id } });
+        showToast("Se guardó la producción.");
         return id;
       },
-      updateProduction: (productionId, patch) => dispatch({ type: "UPDATE_PRODUCTION", productionId, patch }),
-      deleteProduction: (productionId) => dispatch({ type: "DELETE_PRODUCTION", productionId }),
+      updateProduction: (productionId, patch) => {
+        dispatch({ type: "UPDATE_PRODUCTION", productionId, patch });
+        showToast("Se actualizó la producción.");
+      },
+      deleteProduction: (productionId) => {
+        dispatch({ type: "DELETE_PRODUCTION", productionId });
+        showToast("Se eliminó la producción.");
+      },
       addTemplate: (input) => {
         const id = `tpl-${Date.now()}`;
         dispatch({ type: "ADD_TEMPLATE", template: { ...input, id } });
+        showToast("Se guardó la plantilla.");
         return id;
       },
-      updateTemplate: (templateId, patch) => dispatch({ type: "UPDATE_TEMPLATE", templateId, patch }),
-      deleteTemplate: (templateId) => dispatch({ type: "DELETE_TEMPLATE", templateId }),
+      updateTemplate: (templateId, patch) => {
+        dispatch({ type: "UPDATE_TEMPLATE", templateId, patch });
+        showToast("Se actualizó la plantilla.");
+      },
+      deleteTemplate: (templateId) => {
+        dispatch({ type: "DELETE_TEMPLATE", templateId });
+        showToast("Se eliminó la plantilla.");
+      },
       resetDemoData: () => {
         clearPersistedState();
         dispatch({ type: "RESET" });
       },
     }),
-    [state],
+    [state, toast],
   );
 
   return <DemoDataContext.Provider value={value}>{children}</DemoDataContext.Provider>;

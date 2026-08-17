@@ -6,6 +6,7 @@ import { useDemoData } from "@/context/demo-data-context";
 import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { RowAction } from "@/components/ui/RowAction";
+import { InlineEditSelect } from "@/components/ui/InlineEditSelect";
 import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 import { ProductionFilters, type ProductionSortDir } from "@/components/crm/ProductionFilters";
 import { CategoryBadge } from "@/components/crm/CategoryBadge";
@@ -13,8 +14,10 @@ import { StageBadge } from "@/components/crm/StageBadge";
 import { formatDate, PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
 import type { PipelineStage, ProductionCategory } from "@/lib/types";
 
+const STAGE_OPTIONS = Object.entries(PIPELINE_STAGE_LABELS).map(([value, label]) => ({ value, label }));
+
 export default function ProduccionesPage() {
-  const { productions, clients, deleteProduction } = useDemoData();
+  const { productions, clients, updateProduction, deleteProduction } = useDemoData();
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<ProductionCategory | "todas">("todas");
@@ -135,7 +138,14 @@ export default function ProduccionesPage() {
                     <CategoryBadge category={production.category} />
                   </td>
                   <td className="px-5 py-4">
-                    <StageBadge stage={production.stage} />
+                    <InlineEditSelect
+                      value={production.stage}
+                      options={STAGE_OPTIONS}
+                      onChange={(newValue) =>
+                        updateProduction(production.id, { stage: newValue as PipelineStage })
+                      }
+                      badge={<StageBadge stage={production.stage} />}
+                    />
                   </td>
                   <td className="px-5 py-4 text-secondary">
                     {production.startDate ? formatDate(production.startDate) : "Sin definir"}
