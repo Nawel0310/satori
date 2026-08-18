@@ -6,7 +6,8 @@ import type { PipelineStage } from "@/lib/types";
 import { KanbanColumn } from "./KanbanColumn";
 import { KanbanCard } from "./KanbanCard";
 
-const STAGES: PipelineStage[] = ["propuesta", "aprobada", "en_produccion", "cancelada"];
+const STAGES: PipelineStage[] = ["propuesta", "aprobada", "en_produccion"];
+const STAGE_SEQUENCE: PipelineStage[] = ["propuesta", "aprobada", "en_produccion", "finalizada"];
 
 interface KanbanBoardProps {
   search?: string;
@@ -49,8 +50,11 @@ export function KanbanBoard({ search = "", boardRef }: KanbanBoardProps) {
                 key={production.id}
                 production={production}
                 clientName={clientName(production.clientId)}
-                onFinish={(id) => {
-                  moveProductionStage(id, "finalizada");
+                onFinish={() => {
+                  const currentIndex = STAGE_SEQUENCE.indexOf(production.stage);
+                  const nextStage = STAGE_SEQUENCE[currentIndex + 1];
+                  if (!nextStage) return;
+                  moveProductionStage(production.id, nextStage);
                   showToast("Se actualizó la etapa.");
                 }}
               />
