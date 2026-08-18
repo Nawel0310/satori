@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, type DragEvent, type ReactNode } from "react";
+import { useLayoutEffect, useRef, useState, type DragEvent, type ReactNode } from "react";
 import type { PipelineStage } from "@/lib/types";
 import { StageIcon } from "@/components/crm/StageIcon";
+
+const MAX_VISIBLE_CARDS = 5;
 
 interface KanbanColumnProps {
   stage: PipelineStage;
@@ -14,6 +16,32 @@ interface KanbanColumnProps {
 
 export function KanbanColumn({ stage, title, onDropProduction, children, count }: KanbanColumnProps) {
   const [isOver, setIsOver] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const [maxHeight, setMaxHeight] = useState<number | undefined>(undefined);
+
+  useLayoutEffect(() => {
+    const list = listRef.current;
+    if (!list || count <= MAX_VISIBLE_CARDS) {
+      setMaxHeight(undefined);
+      return;
+    }
+
+    function recompute() {
+      if (!list) return;
+      const items = Array.from(list.children) as HTMLElement[];
+      if (items.length < MAX_VISIBLE_CARDS) {
+        setMaxHeight(undefined);
+        return;
+      }
+      const fifth = items[MAX_VISIBLE_CARDS - 1];
+      setMaxHeight(fifth.offsetTop + fifth.offsetHeight - items[0].offsetTop);
+    }
+
+    recompute();
+    const observer = new ResizeObserver(recompute);
+    Array.from(list.children).forEach((child) => observer.observe(child));
+    return () => observer.disconnect();
+  }, [count]);
 
   function handleDragOver(event: DragEvent<HTMLDivElement>) {
     event.preventDefault();
@@ -46,7 +74,13 @@ export function KanbanColumn({ stage, title, onDropProduction, children, count }
         </h3>
         <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-secondary">{count}</span>
       </div>
-      <div className="flex flex-1 flex-col gap-2.5">{children}</div>
+      <div
+        ref={listRef}
+        style={maxHeight !== undefined ? { maxHeight } : undefined}
+        className={`flex flex-1 flex-col gap-2.5 ${maxHeight !== undefined ? "overflow-y-auto pr-1" : ""}`}
+      >
+        {children}
+      </div>
     </div>
   );
 }
