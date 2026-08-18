@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { RowAction } from "@/components/ui/RowAction";
 import { InlineEditSelect } from "@/components/ui/InlineEditSelect";
+import { Pagination } from "@/components/ui/Pagination";
 import { PencilIcon, ProductionsIcon, TrashIcon } from "@/components/ui/icons";
 import { ProductionFilters, type ProductionSortDir } from "@/components/crm/ProductionFilters";
 import { CategoryBadge } from "@/components/crm/CategoryBadge";
@@ -52,6 +53,16 @@ export default function ProduccionesPage() {
       return sortDir === "asc" ? diff : -diff;
     });
   }, [productions, clients, search, categoryFilter, stageFilter, sortDir]);
+
+  const filterKey = `${search}|${categoryFilter}|${stageFilter}`;
+  const [page, setPage] = useState(1);
+  const [pageFilterKey, setPageFilterKey] = useState(filterKey);
+  if (filterKey !== pageFilterKey) {
+    setPageFilterKey(filterKey);
+    setPage(1);
+  }
+  const totalPages = Math.max(1, Math.ceil(filteredProductions.length / 10));
+  const paginatedProductions = filteredProductions.slice((page - 1) * 10, page * 10);
 
   const pendingProduction = productions.find((p) => p.id === pendingDeleteId);
 
@@ -113,7 +124,7 @@ export default function ProduccionesPage() {
               </tr>
             </thead>
             <tbody>
-              {filteredProductions.map((production) => {
+              {paginatedProductions.map((production) => {
                 const productionClient = client(production.clientId);
                 return (
                 <tr key={production.id} className="border-b border-border last:border-0 hover:bg-surface">
@@ -174,6 +185,8 @@ export default function ProduccionesPage() {
           </table>
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <ConfirmDialog
         open={pendingProduction != null}

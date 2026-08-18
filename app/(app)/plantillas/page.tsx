@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { RowAction } from "@/components/ui/RowAction";
 import { SearchInput } from "@/components/ui/SearchInput";
+import { Pagination } from "@/components/ui/Pagination";
 import { PencilIcon, TemplatesIcon, TrashIcon } from "@/components/ui/icons";
 import { formatCurrency, normalizeSearchText } from "@/lib/format";
 
@@ -25,6 +26,15 @@ export default function PlantillasPage() {
       ),
     [budgetTemplates, search],
   );
+
+  const [page, setPage] = useState(1);
+  const [pageFilterKey, setPageFilterKey] = useState(search);
+  if (search !== pageFilterKey) {
+    setPageFilterKey(search);
+    setPage(1);
+  }
+  const totalPages = Math.max(1, Math.ceil(filteredTemplates.length / 10));
+  const paginatedTemplates = filteredTemplates.slice((page - 1) * 10, page * 10);
 
   function templateTotal(lineItems: { quantity: number; unitPrice: number }[]) {
     return lineItems.reduce((sum, item) => sum + item.quantity * item.unitPrice, 0);
@@ -64,7 +74,7 @@ export default function PlantillasPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-3">
-          {filteredTemplates.map((template) => (
+          {paginatedTemplates.map((template) => (
             <Card key={template.id} className="flex flex-wrap items-center justify-between gap-4 p-5">
               <div>
                 <Link
@@ -93,6 +103,8 @@ export default function PlantillasPage() {
           ))}
         </div>
       )}
+
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
 
       <ConfirmDialog
         open={pendingTemplate != null}

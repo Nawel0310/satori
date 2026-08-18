@@ -6,6 +6,7 @@ import { useDemoData } from "@/context/demo-data-context";
 import { ClientFilters } from "@/components/crm/ClientFilters";
 import { ClientTable } from "@/components/crm/ClientTable";
 import { Button } from "@/components/ui/Button";
+import { Pagination } from "@/components/ui/Pagination";
 import { ClientsIcon } from "@/components/ui/icons";
 import { normalizeSearchText } from "@/lib/format";
 import type { ClientType, PipelineStage } from "@/lib/types";
@@ -26,6 +27,16 @@ export default function CrmPage() {
       return matchesSearch && matchesType && matchesStage;
     });
   }, [clients, productions, search, typeFilter, stageFilter]);
+
+  const filterKey = `${search}|${typeFilter}|${stageFilter}`;
+  const [page, setPage] = useState(1);
+  const [pageFilterKey, setPageFilterKey] = useState(filterKey);
+  if (filterKey !== pageFilterKey) {
+    setPageFilterKey(filterKey);
+    setPage(1);
+  }
+  const totalPages = Math.max(1, Math.ceil(filteredClients.length / 10));
+  const paginatedClients = filteredClients.slice((page - 1) * 10, page * 10);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
@@ -55,7 +66,8 @@ export default function CrmPage() {
         />
       </div>
 
-      <ClientTable clients={filteredClients} />
+      <ClientTable clients={paginatedClients} />
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { useDemoData } from "@/context/demo-data-context";
 import { BudgetTable } from "@/components/presupuestos/BudgetTable";
 import { BudgetFilters, type BudgetSortDir, type BudgetSortField } from "@/components/presupuestos/BudgetFilters";
 import { Button } from "@/components/ui/Button";
+import { Pagination } from "@/components/ui/Pagination";
 import { BudgetsIcon } from "@/components/ui/icons";
 import { budgetTotal, normalizeSearchText } from "@/lib/format";
 import type { BudgetStatus } from "@/lib/types";
@@ -35,6 +36,16 @@ export default function PresupuestosPage() {
     });
   }, [budgets, clients, search, statusFilter, sortField, sortDir]);
 
+  const filterKey = `${search}|${statusFilter}`;
+  const [page, setPage] = useState(1);
+  const [pageFilterKey, setPageFilterKey] = useState(filterKey);
+  if (filterKey !== pageFilterKey) {
+    setPageFilterKey(filterKey);
+    setPage(1);
+  }
+  const totalPages = Math.max(1, Math.ceil(filteredBudgets.length / 10));
+  const paginatedBudgets = filteredBudgets.slice((page - 1) * 10, page * 10);
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
@@ -63,7 +74,8 @@ export default function PresupuestosPage() {
         />
       </div>
 
-      <BudgetTable budgets={filteredBudgets} clients={clients} />
+      <BudgetTable budgets={paginatedBudgets} clients={clients} />
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 }

@@ -10,6 +10,7 @@ import {
 } from "@/components/crm/ReminderFilters";
 import { ReminderList } from "@/components/crm/ReminderList";
 import { Button } from "@/components/ui/Button";
+import { Pagination } from "@/components/ui/Pagination";
 import { RemindersIcon } from "@/components/ui/icons";
 import { normalizeSearchText } from "@/lib/format";
 
@@ -35,6 +36,16 @@ export default function RecordatoriosPage() {
       return sortDir === "asc" ? diff : -diff;
     });
   }, [reminders, clients, search, statusFilter, sortDir]);
+
+  const filterKey = `${search}|${statusFilter}`;
+  const [page, setPage] = useState(1);
+  const [pageFilterKey, setPageFilterKey] = useState(filterKey);
+  if (filterKey !== pageFilterKey) {
+    setPageFilterKey(filterKey);
+    setPage(1);
+  }
+  const totalPages = Math.max(1, Math.ceil(filteredReminders.length / 10));
+  const paginatedReminders = filteredReminders.slice((page - 1) * 10, page * 10);
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
@@ -62,7 +73,8 @@ export default function RecordatoriosPage() {
         />
       </div>
 
-      <ReminderList reminders={filteredReminders} />
+      <ReminderList reminders={paginatedReminders} />
+      <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
   );
 }
