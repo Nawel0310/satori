@@ -20,6 +20,12 @@ export function formatDate(isoDate: string): string {
   return dateFormatter.format(new Date(`${isoDate}T00:00:00`));
 }
 
+const DIACRITICS_REGEX = /[\u0300-\u036f]/g;
+
+export function normalizeSearchText(text: string): string {
+  return text.normalize("NFD").replace(DIACRITICS_REGEX, "").toLowerCase();
+}
+
 export function lineItemTotal(item: BudgetLineItem): number {
   return item.quantity * item.unitPrice;
 }

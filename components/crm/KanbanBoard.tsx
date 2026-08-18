@@ -1,7 +1,7 @@
 "use client";
 
 import { useDemoData } from "@/context/demo-data-context";
-import { PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
+import { normalizeSearchText, PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
 import type { PipelineStage } from "@/lib/types";
 import { KanbanColumn } from "./KanbanColumn";
 import { KanbanCard } from "./KanbanCard";
@@ -14,13 +14,13 @@ interface KanbanBoardProps {
 }
 
 export function KanbanBoard({ search = "", boardRef }: KanbanBoardProps) {
-  const { productions, clients, moveProductionStage } = useDemoData();
+  const { productions, clients, moveProductionStage, showToast } = useDemoData();
 
   function clientName(clientId: string) {
     return clients.find((c) => c.id === clientId)?.name ?? "Cliente";
   }
 
-  const keyword = search.trim().toLowerCase();
+  const keyword = normalizeSearchText(search.trim());
 
   return (
     <div ref={boardRef} className="flex flex-wrap items-start gap-4">
@@ -33,9 +33,8 @@ export function KanbanBoard({ search = "", boardRef }: KanbanBoardProps) {
             PRODUCTION_CATEGORY_LABELS[p.category],
             PIPELINE_STAGE_LABELS[p.stage],
           ]
-            .join(" ")
-            .toLowerCase();
-          return searchable.includes(keyword);
+            .join(" ");
+          return normalizeSearchText(searchable).includes(keyword);
         });
         return (
           <KanbanColumn
@@ -50,7 +49,10 @@ export function KanbanBoard({ search = "", boardRef }: KanbanBoardProps) {
                 key={production.id}
                 production={production}
                 clientName={clientName(production.clientId)}
-                onFinish={(id) => moveProductionStage(id, "finalizada")}
+                onFinish={(id) => {
+                  moveProductionStage(id, "finalizada");
+                  showToast("Se actualizó la etapa.");
+                }}
               />
             ))}
           </KanbanColumn>

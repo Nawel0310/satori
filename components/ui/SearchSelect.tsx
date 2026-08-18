@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { XIcon } from "./icons";
+import { normalizeSearchText } from "@/lib/format";
 
 export interface SearchSelectOption {
   id: string;
@@ -40,7 +41,7 @@ export function SearchSelect({
   }
 
   const matches = query.trim()
-    ? options.filter((o) => o.label.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 6)
+    ? options.filter((o) => normalizeSearchText(o.label).includes(normalizeSearchText(query.trim()))).slice(0, 6)
     : showAllOnFocus
       ? options
       : [];

@@ -10,6 +10,7 @@ import {
 } from "@/components/crm/ReminderFilters";
 import { ReminderList } from "@/components/crm/ReminderList";
 import { Button } from "@/components/ui/Button";
+import { normalizeSearchText } from "@/lib/format";
 
 export default function RecordatoriosPage() {
   const { reminders, clients } = useDemoData();
@@ -18,13 +19,13 @@ export default function RecordatoriosPage() {
   const [sortDir, setSortDir] = useState<ReminderSortDir>("asc");
 
   const filteredReminders = useMemo(() => {
-    const keyword = search.trim().toLowerCase();
+    const keyword = normalizeSearchText(search.trim());
     const filtered = reminders.filter((reminder) => {
       const matchesStatus =
         statusFilter === "todos" ||
         (statusFilter === "hecho" ? reminder.done : !reminder.done);
       const clientName = clients.find((c) => c.id === reminder.clientId)?.name ?? "";
-      const searchable = `${reminder.text} ${clientName}`.toLowerCase();
+      const searchable = normalizeSearchText(`${reminder.text} ${clientName}`);
       const matchesSearch = searchable.includes(keyword);
       return matchesSearch && matchesStatus;
     });

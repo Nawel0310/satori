@@ -6,7 +6,7 @@ import { useDemoData } from "@/context/demo-data-context";
 import { BudgetTable } from "@/components/presupuestos/BudgetTable";
 import { BudgetFilters, type BudgetSortDir, type BudgetSortField } from "@/components/presupuestos/BudgetFilters";
 import { Button } from "@/components/ui/Button";
-import { budgetTotal } from "@/lib/format";
+import { budgetTotal, normalizeSearchText } from "@/lib/format";
 import type { BudgetStatus } from "@/lib/types";
 
 export default function PresupuestosPage() {
@@ -17,11 +17,11 @@ export default function PresupuestosPage() {
   const [sortDir, setSortDir] = useState<BudgetSortDir>("desc");
 
   const filteredBudgets = useMemo(() => {
-    const keyword = search.trim().toLowerCase();
+    const keyword = normalizeSearchText(search.trim());
     const filtered = budgets.filter((budget) => {
       const matchesStatus = statusFilter === "todos" || budget.status === statusFilter;
       const clientName = clients.find((c) => c.id === budget.clientId)?.name ?? "";
-      const searchable = `${budget.id} ${budget.title} ${clientName}`.toLowerCase();
+      const searchable = normalizeSearchText(`${budget.id} ${budget.title} ${clientName}`);
       const matchesSearch = searchable.includes(keyword);
       return matchesSearch && matchesStatus;
     });

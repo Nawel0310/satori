@@ -6,6 +6,7 @@ import { useDemoData } from "@/context/demo-data-context";
 import { ClientFilters } from "@/components/crm/ClientFilters";
 import { ClientTable } from "@/components/crm/ClientTable";
 import { Button } from "@/components/ui/Button";
+import { normalizeSearchText } from "@/lib/format";
 import type { ClientType, PipelineStage } from "@/lib/types";
 
 export default function CrmPage() {
@@ -16,7 +17,7 @@ export default function CrmPage() {
 
   const filteredClients = useMemo(() => {
     return clients.filter((client) => {
-      const matchesSearch = client.name.toLowerCase().includes(search.trim().toLowerCase());
+      const matchesSearch = normalizeSearchText(client.name).includes(normalizeSearchText(search.trim()));
       const matchesType = typeFilter === "todos" || client.type === typeFilter;
       const clientProduction = productions.find((p) => p.clientId === client.id);
       const matchesStage =

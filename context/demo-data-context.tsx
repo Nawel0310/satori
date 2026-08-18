@@ -230,6 +230,7 @@ interface ToastState {
 
 interface DemoDataContextValue extends DemoDataState {
   toast: ToastState | null;
+  showToast: (message: string, icon?: ReactNode) => void;
   moveProductionStage: (productionId: string, stage: PipelineStage) => void;
   setBudgetStatus: (budgetId: string, status: BudgetStatus) => void;
   approveBudget: (budgetId: string) => void;
@@ -296,6 +297,7 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
     () => ({
       ...state,
       toast,
+      showToast,
       moveProductionStage: (productionId, stage) =>
         dispatch({ type: "MOVE_PRODUCTION_STAGE", productionId, stage }),
       setBudgetStatus: (budgetId, status) => dispatch({ type: "SET_BUDGET_STATUS", budgetId, status }),
@@ -305,7 +307,10 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
         dispatch({ type: "UPDATE_BUDGET", budgetId, patch: { emailSentAt: new Date().toISOString() } });
         showToast("Presupuesto enviado por email.", <SendIcon />);
       },
-      toggleReminder: (reminderId) => dispatch({ type: "TOGGLE_REMINDER", reminderId }),
+      toggleReminder: (reminderId) => {
+        dispatch({ type: "TOGGLE_REMINDER", reminderId });
+        showToast("Se actualizó el recordatorio.");
+      },
       addReminder: (input) => {
         const id = `rem-${Date.now()}`;
         dispatch({ type: "ADD_REMINDER", reminder: { ...input, id, done: false } });

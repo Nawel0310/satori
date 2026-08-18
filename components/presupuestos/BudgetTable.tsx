@@ -57,7 +57,7 @@ export function BudgetTable({ budgets, clients }: BudgetTableProps) {
               Estado
             </th>
             <th scope="col" className="px-5 py-3">
-              <span className="sr-only">Acciones</span>
+              Acciones
             </th>
           </tr>
         </thead>

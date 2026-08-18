@@ -11,7 +11,7 @@ import { PencilIcon, TrashIcon } from "@/components/ui/icons";
 import { ProductionFilters, type ProductionSortDir } from "@/components/crm/ProductionFilters";
 import { CategoryBadge } from "@/components/crm/CategoryBadge";
 import { StageBadge } from "@/components/crm/StageBadge";
-import { formatDate, PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
+import { formatDate, normalizeSearchText, PIPELINE_STAGE_LABELS, PRODUCTION_CATEGORY_LABELS } from "@/lib/format";
 import type { PipelineStage, ProductionCategory } from "@/lib/types";
 
 const STAGE_OPTIONS = Object.entries(PIPELINE_STAGE_LABELS).map(([value, label]) => ({ value, label }));
@@ -29,18 +29,18 @@ export default function ProduccionesPage() {
   }
 
   const filteredProductions = useMemo(() => {
-    const keyword = search.trim().toLowerCase();
+    const keyword = normalizeSearchText(search.trim());
     const filtered = productions.filter((production) => {
       const matchesCategory = categoryFilter === "todas" || production.category === categoryFilter;
       const matchesStage = stageFilter === "todas" || production.stage === stageFilter;
-      const searchable = [
-        production.title,
-        clients.find((c) => c.id === production.clientId)?.name ?? "",
-        PRODUCTION_CATEGORY_LABELS[production.category],
-        PIPELINE_STAGE_LABELS[production.stage],
-      ]
-        .join(" ")
-        .toLowerCase();
+      const searchable = normalizeSearchText(
+        [
+          production.title,
+          clients.find((c) => c.id === production.clientId)?.name ?? "",
+          PRODUCTION_CATEGORY_LABELS[production.category],
+          PIPELINE_STAGE_LABELS[production.stage],
+        ].join(" "),
+      );
       const matchesSearch = searchable.includes(keyword);
       return matchesSearch && matchesCategory && matchesStage;
     });
@@ -105,7 +105,7 @@ export default function ProduccionesPage() {
                   Inicio
                 </th>
                 <th scope="col" className="px-5 py-3">
-                  <span className="sr-only">Acciones</span>
+                  Acciones
                 </th>
               </tr>
             </thead>

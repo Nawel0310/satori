@@ -56,7 +56,7 @@ export function ReminderList({ reminders }: ReminderListProps) {
                 Estado
               </th>
               <th scope="col" className="px-5 py-3">
-                <span className="sr-only">Acciones</span>
+                Acciones
               </th>
             </tr>
           </thead>
