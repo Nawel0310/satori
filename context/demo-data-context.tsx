@@ -107,7 +107,9 @@ function demoDataReducer(state: DemoDataState, action: Action): DemoDataState {
       return {
         ...state,
         productions: state.productions.map((p) =>
-          p.id === action.productionId ? { ...p, stage: action.stage } : p,
+          p.id === action.productionId
+            ? { ...p, stage: action.stage, stageUpdatedAt: Date.now() }
+            : p,
         ),
       };
     case "SET_BUDGET_STATUS":
@@ -193,7 +195,16 @@ function demoDataReducer(state: DemoDataState, action: Action): DemoDataState {
       return {
         ...state,
         productions: state.productions.map((p) =>
-          p.id === action.productionId ? { ...p, ...action.patch } : p,
+          p.id === action.productionId
+            ? {
+                ...p,
+                ...action.patch,
+                stageUpdatedAt:
+                  action.patch.stage !== undefined && action.patch.stage !== p.stage
+                    ? Date.now()
+                    : p.stageUpdatedAt,
+              }
+            : p,
         ),
       };
     case "DELETE_PRODUCTION":
@@ -249,7 +260,7 @@ interface DemoDataContextValue extends DemoDataState {
   addClient: (input: Omit<Client, "id" | "notes">) => string;
   updateClient: (clientId: string, patch: Partial<Omit<Client, "id" | "notes">>) => void;
   deleteClient: (clientId: string) => void;
-  addProduction: (input: Omit<Production, "id">) => string;
+  addProduction: (input: Omit<Production, "id" | "stageUpdatedAt">) => string;
   updateProduction: (productionId: string, patch: Partial<Omit<Production, "id">>) => void;
   deleteProduction: (productionId: string) => void;
   addTemplate: (input: Omit<BudgetTemplate, "id">) => string;
@@ -369,7 +380,7 @@ export function DemoDataProvider({ children }: { children: ReactNode }) {
       },
       addProduction: (input) => {
         const id = `prod-${Date.now()}`;
-        dispatch({ type: "ADD_PRODUCTION", production: { ...input, id } });
+        dispatch({ type: "ADD_PRODUCTION", production: { ...input, id, stageUpdatedAt: Date.now() } });
         showToast("Se guardó la producción.");
         return id;
       },

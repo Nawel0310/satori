@@ -13,7 +13,7 @@ interface ProductionFormProps {
   clients: Client[];
   initialProduction?: Production;
   defaultClientId?: string;
-  onSubmit: (input: Omit<Production, "id">) => void;
+  onSubmit: (input: Omit<Production, "id" | "stageUpdatedAt">) => void;
   onCancel: () => void;
 }
 

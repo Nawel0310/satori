@@ -37,6 +37,7 @@ export function KanbanBoard({ search = "", boardRef }: KanbanBoardProps) {
             .join(" ");
           return normalizeSearchText(searchable).includes(keyword);
         });
+        stageProductions.sort((a, b) => a.stageUpdatedAt - b.stageUpdatedAt);
         return (
           <KanbanColumn
             key={stage}

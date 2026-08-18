@@ -270,9 +270,13 @@ export const INITIAL_CLIENTS: Client[] = [
   },
 ];
 
+const DAY_MS = 24 * 60 * 60 * 1000;
+const stageDaysAgo = (days: number) => Date.now() - days * DAY_MS;
+
 export const INITIAL_PRODUCTIONS: Production[] = [
   {
     id: "prod-001",
+    stageUpdatedAt: stageDaysAgo(15),
     clientId: "cli-001",
     title: "Video drone lanzamiento",
     description: "Toma aérea del edificio con luz de atardecer para la campaña de lanzamiento comercial.",
@@ -282,6 +286,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-002",
+    stageUpdatedAt: stageDaysAgo(14),
     clientId: "cli-002",
     title: "Seguimiento mensual de obra, Torre Norte",
     description: "Registro mensual del avance de obra con dron, entrega los días 28 de cada mes.",
@@ -291,6 +296,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-003",
+    stageUpdatedAt: stageDaysAgo(13),
     clientId: "cli-003",
     title: "Evento corporativo Banco Andes",
     category: "evento",
@@ -299,6 +305,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-004",
+    stageUpdatedAt: stageDaysAgo(12),
     clientId: "cli-004",
     title: "Video institucional de turismo",
     category: "institucional",
@@ -307,6 +314,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-005",
+    stageUpdatedAt: stageDaysAgo(11),
     clientId: "cli-005",
     title: "Cobertura Expo Rosario 2026",
     category: "evento",
@@ -315,6 +323,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-006",
+    stageUpdatedAt: stageDaysAgo(10),
     clientId: "cli-006",
     title: "Drone + recorrido virtual",
     category: "drone",
@@ -322,6 +331,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-007",
+    stageUpdatedAt: stageDaysAgo(9),
     clientId: "cli-007",
     title: "Video drone desarrollo costanera",
     description: "Tomas aéreas del desarrollo en la costanera con luz de atardecer.",
@@ -331,6 +341,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-008",
+    stageUpdatedAt: stageDaysAgo(8),
     clientId: "cli-008",
     title: "Seguimiento quincenal de obra, Barrio Fisherton",
     description: "Registro quincenal del avance de obra con dron.",
@@ -340,6 +351,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-009",
+    stageUpdatedAt: stageDaysAgo(7),
     clientId: "cli-009",
     title: "Colocación de piedra fundamental",
     description: "Cobertura del acto de colocación de piedra fundamental.",
@@ -349,6 +361,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-010",
+    stageUpdatedAt: stageDaysAgo(6),
     clientId: "cli-010",
     title: "Spot institucional cliente Agencia Creativa",
     description: "Spot de 30 segundos para un cliente de la agencia.",
@@ -358,6 +371,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-011",
+    stageUpdatedAt: stageDaysAgo(5),
     clientId: "cli-011",
     title: "Activación de marca en shopping",
     description: "Cobertura fotográfica y video corto de la activación.",
@@ -367,6 +381,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-012",
+    stageUpdatedAt: stageDaysAgo(4),
     clientId: "cli-012",
     title: "Video institucional obras públicas",
     category: "institucional",
@@ -375,6 +390,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-013",
+    stageUpdatedAt: stageDaysAgo(3),
     clientId: "cli-013",
     title: "Acto de fin de curso",
     description: "Cobertura del acto de entrega de diplomas.",
@@ -384,6 +400,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-014",
+    stageUpdatedAt: stageDaysAgo(2),
     clientId: "cli-014",
     title: "Casamiento corporativo",
     description: "Cobertura completa con dron del evento.",
@@ -393,6 +410,7 @@ export const INITIAL_PRODUCTIONS: Production[] = [
   },
   {
     id: "prod-015",
+    stageUpdatedAt: stageDaysAgo(1),
     clientId: "cli-015",
     title: "Festival gastronómico en la ribera",
     description: "Cobertura de 2 días del festival.",

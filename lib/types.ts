@@ -37,6 +37,7 @@ export interface Production {
   category: ProductionCategory;
   stage: PipelineStage;
   startDate?: string;
+  stageUpdatedAt: number;
 }
 
 export interface BudgetLineItem {
