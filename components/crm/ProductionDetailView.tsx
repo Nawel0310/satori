@@ -62,7 +62,7 @@ export function ProductionDetailView({ id }: { id: string }) {
               <CategoryBadge category={production.category} />
               <h1 className="font-heading mt-2 text-2xl font-bold text-primary">{production.title}</h1>
               {client ? (
-                <Link href={`/crm/detalle?id=${client.id}`} className="mt-1 inline-block text-sm text-secondary underline-offset-4 hover:underline">
+                <Link href={`/clientes/detalle?id=${client.id}`} className="mt-1 inline-block text-sm text-secondary underline-offset-4 hover:underline">
                   {client.name}
                 </Link>
               ) : (

@@ -77,7 +77,7 @@ export function BudgetTable({ budgets, clients }: BudgetTableProps) {
                 <td className="px-5 py-4">
                   {budgetClient ? (
                     <Link
-                      href={`/crm/detalle?id=${budgetClient.id}`}
+                      href={`/clientes/detalle?id=${budgetClient.id}`}
                       className="font-medium text-primary underline-offset-4 hover:underline"
                     >
                       {budgetClient.name}

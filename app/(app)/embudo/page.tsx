@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { EmbudoFilters } from "@/components/crm/EmbudoFilters";
 import { KanbanBoard } from "@/components/crm/KanbanBoard";
+import { FunnelIcon } from "@/components/ui/icons";
 
 export default function EmbudoPage() {
   const [search, setSearch] = useState("");
@@ -28,7 +29,10 @@ export default function EmbudoPage() {
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
       <header className="mb-8">
-        <h1 className="font-heading text-3xl font-bold text-primary">Embudo de propuestas</h1>
+        <div className="flex items-center gap-3">
+          <FunnelIcon width={28} height={28} className="text-primary" />
+          <h1 className="font-heading text-3xl font-bold text-primary">Embudo de propuestas</h1>
+        </div>
         <p className="mt-1 text-sm text-secondary">
           Arrastrá una tarjeta para cambiarla de etapa. De un vistazo sabés en qué está cada propuesta.
         </p>

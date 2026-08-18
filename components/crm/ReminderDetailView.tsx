@@ -58,7 +58,7 @@ export function ReminderDetailView({ id }: { id: string }) {
               {reminder.text}
             </p>
             {client ? (
-              <Link href={`/crm/detalle?id=${client.id}`} className="mt-1 inline-block text-sm text-secondary underline-offset-4 hover:underline">
+              <Link href={`/clientes/detalle?id=${client.id}`} className="mt-1 inline-block text-sm text-secondary underline-offset-4 hover:underline">
                 {client.name}
               </Link>
             ) : (

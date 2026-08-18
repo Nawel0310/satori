@@ -61,7 +61,7 @@ export function ClientTable({ clients }: ClientTableProps) {
                   <ClientLogo name={client.name} logoUrl={client.logoUrl} size="sm" />
                 </td>
                 <td className="px-5 py-4">
-                  <Link href={`/crm/detalle?id=${client.id}`} className="font-medium text-primary underline-offset-4 hover:underline">
+                  <Link href={`/clientes/detalle?id=${client.id}`} className="font-medium text-primary underline-offset-4 hover:underline">
                     {client.name}
                   </Link>
                   <p className="mt-0.5 text-xs text-secondary">{CLIENT_TYPE_LABELS[client.type]}</p>
@@ -71,7 +71,7 @@ export function ClientTable({ clients }: ClientTableProps) {
                 <td className="px-5 py-4 text-secondary">{formatDate(client.lastContactDate)}</td>
                 <td className="px-5 py-4">
                   <div className="flex justify-end gap-2">
-                    <RowAction icon={<PencilIcon />} label="Editar" href={`/crm/detalle/editar?id=${client.id}`} />
+                    <RowAction icon={<PencilIcon />} label="Editar" href={`/clientes/detalle/editar?id=${client.id}`} />
                     <RowAction
                       icon={<TrashIcon />}
                       label="Eliminar"

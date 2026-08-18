@@ -49,7 +49,7 @@ export function KanbanCard({ production, clientName, onFinish }: KanbanCardProps
               Ver Producción
             </Link>
             <Link
-              href={`/crm/detalle?id=${production.clientId}`}
+              href={`/clientes/detalle?id=${production.clientId}`}
               className="text-xs font-medium text-primary underline-offset-4 hover:underline"
             >
               Ver Cliente

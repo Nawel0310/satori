@@ -39,12 +39,12 @@ Si necesitás mostrar la demo varias veces seguidas (o volver a los datos de eje
 |---|---|
 | Login | `/login` |
 | Dashboard | `/dashboard` |
-| Gestión Clientes — listado | `/crm` |
-| Gestión Clientes — ficha de cliente | `/crm/[id]` |
-| Gestión Clientes — nuevo / editar cliente | `/crm/nuevo`, `/crm/[id]/editar` |
-| Gestión Clientes — embudo (Kanban) | `/crm/embudo` |
-| Gestión Clientes — producciones | `/crm/producciones` |
-| Gestión Clientes — recordatorios | `/crm/recordatorios` |
+| Gestión Clientes — listado | `/clientes` |
+| Gestión Clientes — ficha de cliente | `/clientes/[id]` |
+| Gestión Clientes — nuevo / editar cliente | `/clientes/nuevo`, `/clientes/[id]/editar` |
+| Gestión Clientes — embudo (Kanban) | `/clientes/embudo` |
+| Gestión Clientes — producciones | `/clientes/producciones` |
+| Gestión Clientes — recordatorios | `/clientes/recordatorios` |
 | Presupuestos — listado | `/presupuestos` |
 | Presupuestos — nuevo / editar | `/presupuestos/nuevo`, `/presupuestos/[id]/editar` |
 | Presupuestos — vista del cliente (Aprobar/Rechazar) | `/presupuestos/[id]/cliente` |
