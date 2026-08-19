@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# playwright demo recordings
+/recordings/
+
 # production
 /build
 
