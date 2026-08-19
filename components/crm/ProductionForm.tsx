@@ -24,9 +24,7 @@ export function ProductionForm({
   onSubmit,
   onCancel,
 }: ProductionFormProps) {
-  const [clientId, setClientId] = useState(
-    initialProduction?.clientId ?? defaultClientId ?? clients[0]?.id ?? "",
-  );
+  const [clientId, setClientId] = useState(initialProduction?.clientId ?? defaultClientId ?? "");
   const [title, setTitle] = useState(initialProduction?.title ?? "");
   const [description, setDescription] = useState(initialProduction?.description ?? "");
   const [category, setCategory] = useState<ProductionCategory>(initialProduction?.category ?? "drone");

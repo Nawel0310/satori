@@ -23,7 +23,7 @@ interface BudgetFormProps {
 export function BudgetForm({ initialBudget, onSubmit, onCancel }: BudgetFormProps) {
   const { clients, productions, budgetTemplates } = useDemoData();
   const [budgetId] = useState(() => initialBudget?.id ?? nextBudgetId());
-  const [clientId, setClientId] = useState(initialBudget?.clientId ?? clients[0]?.id ?? "");
+  const [clientId, setClientId] = useState(initialBudget?.clientId ?? "");
   const [productionId, setProductionId] = useState(initialBudget?.productionId ?? "");
   const [title, setTitle] = useState(initialBudget?.title ?? "");
   const [status, setStatus] = useState<BudgetStatus>(initialBudget?.status ?? "en_espera");
@@ -97,7 +97,9 @@ export function BudgetForm({ initialBudget, onSubmit, onCancel }: BudgetFormProp
         value={productionId}
         onChange={setProductionId}
         searchPlaceholder="Buscar producción…"
-        emptyMessage="Este cliente no tiene producciones cargadas."
+        emptyMessage={
+          clientId ? "Este cliente no tiene producciones cargadas." : "Elegí un cliente para ver sus producciones."
+        }
         placeholder="Sin producción asociada"
         showAllOnFocus
       />

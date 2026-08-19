@@ -1,12 +1,15 @@
 /**
- * Records a ~90s desktop walkthrough video of the deployed Satori demo
+ * Records a ~95s desktop walkthrough video of the deployed Satori demo
  * (https://nawel0310.github.io/satori/) for client presentations, at
- * 1920x1080. Order: login -> crear cliente -> crear recordatorio -> crear
- * producción -> arrastrar una tarjeta en el embudo -> crear presupuesto ->
- * enviarlo por email dos veces (la segunda dispara y confirma el diálogo de
- * reenvío) -> dashboard. A synthetic cursor dot is drawn on the page so
- * mouse movement/clicks are visible in the recording, and typing/clicks are
- * paced slower on forms, faster on plain "look at this screen" moments.
+ * 1920x1080. Order: login -> crear cliente -> crear recordatorio (eligiendo
+ * el cliente a mano, el campo ya no viene precargado) -> crear producción ->
+ * arrastrar una tarjeta en el embudo -> crear presupuesto (elegir cliente,
+ * ver cómo recién ahí aparece su producción asociada, elegirla, aplicar
+ * plantilla) -> enviarlo por email dos veces (la segunda dispara y confirma
+ * el diálogo de reenvío) -> dashboard. A synthetic cursor dot is drawn on
+ * the page so mouse movement/clicks are visible in the recording, and
+ * typing/clicks are paced slower on forms, faster on plain "look at this
+ * screen" moments.
  *
  * Usage: pnpm record:demo:desktop
  * Output: recordings/satori-demo-desktop.mp4 (also keeps the raw .webm)
@@ -191,6 +194,9 @@ async function runScript(page) {
   await goTo(page, "Recordatorios", "Recordatorios");
   await clickLocator(page, page.getByRole("button", { name: "+ Nuevo recordatorio" }));
   await page.waitForTimeout(500);
+  await typeInto(page, page.getByLabel("Cliente", { exact: true }), "hotel");
+  await page.waitForTimeout(500);
+  await clickLocator(page, page.getByRole("option", { name: "Hotel Boutique Costanera" }));
   await typeInto(page, page.getByLabel("Recordatorio"), "Confirmar rodaje con Hotel Boutique Costanera");
   await page.waitForTimeout(700);
   await clickLocator(page, page.getByRole("button", { name: "Guardar recordatorio" }));
@@ -224,10 +230,20 @@ async function runScript(page) {
   await goTo(page, "Presupuestos", "Presupuestos");
   await clickLocator(page, page.getByRole("button", { name: "+ Nuevo presupuesto" }));
   await page.waitForTimeout(500);
+  // Elegir cliente primero: recién ahí "Producciones asociadas" se puebla con
+  // las producciones de ese cliente (antes de elegir cliente queda vacío).
+  await typeInto(page, page.getByLabel("Cliente", { exact: true }), "constructora", { delay: 90 });
+  await page.waitForTimeout(500);
+  await clickLocator(page, page.getByRole("option", { name: "Constructora Río" }));
+  await page.waitForTimeout(500);
+  await clickLocator(page, page.getByLabel("Producciones asociadas"));
+  await page.waitForTimeout(400);
+  await clickLocator(page, page.getByRole("option", { name: "Recorrido aéreo de lanzamiento" }));
+  await page.waitForTimeout(600);
   await moveToLocator(page, page.getByLabel("Plantilla reutilizable"));
   await page.waitForTimeout(300);
   await page.getByLabel("Plantilla reutilizable").selectOption({ index: 1 });
-  await page.waitForTimeout(1400);
+  await page.waitForTimeout(1200);
   await clickLocator(page, page.getByRole("button", { name: "Guardar presupuesto" }));
   await page.waitForTimeout(800);
 

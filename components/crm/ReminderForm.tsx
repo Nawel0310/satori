@@ -16,9 +16,7 @@ interface ReminderFormProps {
 }
 
 export function ReminderForm({ clients, defaultClientId, initialReminder, onSubmit, onCancel }: ReminderFormProps) {
-  const [clientId, setClientId] = useState(
-    initialReminder?.clientId ?? defaultClientId ?? clients[0]?.id ?? "",
-  );
+  const [clientId, setClientId] = useState(initialReminder?.clientId ?? defaultClientId ?? "");
   const [text, setText] = useState(initialReminder?.text ?? "");
   const [dueDate, setDueDate] = useState(
     initialReminder?.dueDate ?? new Date().toISOString().slice(0, 10),

@@ -1,6 +1,10 @@
 /**
  * Records a ~70s walkthrough video of the deployed Satori demo
- * (https://nawel0310.github.io/satori/) for client presentations.
+ * (https://nawel0310.github.io/satori/) for client presentations. The
+ * Cliente field on Producción/Presupuesto/Recordatorio never comes
+ * preselected, so every step searches and picks a client explicitly (the
+ * presupuesto step also shows "Producciones asociadas" populating only
+ * after a client is chosen).
  *
  * Usage: pnpm record:demo
  * Output: recordings/satori-demo.mp4 (also keeps the raw .webm)
@@ -79,12 +83,20 @@ async function runScript(page) {
   await page.mouse.wheel(0, 500);
   await page.waitForTimeout(2500);
 
-  // 5. Presupuestos -> nuevo presupuesto (con plantilla)
+  // 5. Presupuestos -> nuevo presupuesto (cliente -> producción asociada -> plantilla)
   await goTo(page, "Presupuestos", "Presupuestos");
   await page.getByRole("button", { name: "+ Nuevo presupuesto" }).click();
-  await page.waitForTimeout(1000);
+  await page.waitForTimeout(600);
+  await page.getByLabel("Cliente", { exact: true }).fill("constructora");
+  await page.waitForTimeout(800);
+  await page.getByRole("option", { name: "Constructora Río" }).click();
+  await page.waitForTimeout(800);
+  await page.getByLabel("Producciones asociadas").click();
+  await page.waitForTimeout(400);
+  await page.getByRole("option", { name: "Recorrido aéreo de lanzamiento" }).click();
+  await page.waitForTimeout(800);
   await page.getByLabel("Plantilla reutilizable").selectOption({ index: 1 });
-  await page.waitForTimeout(2500);
+  await page.waitForTimeout(2000);
   await page.getByRole("button", { name: "Guardar presupuesto" }).click();
   await page.waitForTimeout(2000);
 
@@ -92,6 +104,10 @@ async function runScript(page) {
   await goTo(page, "Recordatorios", "Recordatorios");
   await page.getByRole("button", { name: "+ Nuevo recordatorio" }).click();
   await page.waitForTimeout(600);
+  await page.getByLabel("Cliente", { exact: true }).fill("hotel");
+  await page.waitForTimeout(700);
+  await page.getByRole("option", { name: "Hotel Boutique Costanera" }).click();
+  await page.waitForTimeout(500);
   await type(page, "Recordatorio", "Confirmar rodaje con Hotel Boutique Costanera");
   await page.waitForTimeout(1500);
   await page.getByRole("button", { name: "Guardar recordatorio" }).click();
