@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "record:demo": "node scripts/record-demo.mjs",
-    "record:demo:desktop": "node scripts/record-demo-desktop.mjs"
+    "record:demo:desktop": "node scripts/record-demo-desktop.mjs",
+    "overlay:demo:desktop": "node scripts/add-overlays-desktop.mjs"
   },
   "dependencies": {
     "next": "16.3.0",
