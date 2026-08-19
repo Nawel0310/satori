@@ -32,6 +32,8 @@ No test suite is configured. Login requires the fixed demo credentials in `lib/a
 
 **Static export (`output: "export"`) has no server, so every route must be statically resolvable at build time.** Screens that show/edit a specific entity (`ClientDetailView`, `BudgetClientView`, etc.) live behind **static** route segments (e.g. `/clientes/detalle`, `/presupuestos/editar`) and read the entity `id` from the query string via `useSearchParams()` (wrapped in `<Suspense>`, required by Next for static export), not from a dynamic `[id]` route segment. This is deliberate: a `[id]` segment would need `generateStaticParams()` enumerating every valid id at build time, which is impossible for entities created live during a demo (client-generated ids like `` `cli-${Date.now()}` ``) — those ids don't exist yet at build time, so GitHub Pages would 404 on them. Follow this query-param pattern for any new "view/edit one entity" screen instead of adding a new `[id]` folder.
 
+**Deployed to GitHub Pages under a `/satori` subpath** (`next.config.ts`): `basePath`/`assetPrefix` are hardcoded to `/satori`, and `images.loader` points at `image-loader.ts` (a custom loader prefixing `/satori` onto local image `src`s, since static export can't use Next's default image optimization). Any new local image reference must go through `next/image` (or otherwise route through this loader) rather than a raw `<img src="/...">`, or it'll 404 under the subpath in production.
+
 ### Data flow
 
 - `lib/types.ts` — the entire domain model: `Client`, `Production`, `Budget`, `BudgetTemplate`, `Reminder`, `Note`, plus the union types for stages/statuses/categories (`PipelineStage`, `BudgetStatus`, `ProductionCategory`, `ClientType`).
