@@ -1,17 +1,20 @@
 /**
- * Records a ~95s desktop walkthrough video of the deployed Satori demo
- * (https://nawel0310.github.io/satori/) for client presentations, at
- * 1920x1080. Order: login -> crear cliente -> crear recordatorio (eligiendo
- * el cliente a mano, el campo ya no viene precargado) -> crear producción ->
- * arrastrar una tarjeta en el embudo -> crear presupuesto (elegir cliente,
- * ver cómo recién ahí aparece su producción asociada, elegirla, aplicar
- * plantilla) -> enviarlo por email dos veces (la segunda dispara y confirma
- * el diálogo de reenvío) -> dashboard. A synthetic cursor dot is drawn on
- * the page so mouse movement/clicks are visible in the recording, and
- * typing/clicks are paced slower on forms, faster on plain "look at this
- * screen" moments.
+ * Records a ~95s desktop walkthrough video of the Satori demo running on
+ * the local dev server (http://localhost:3000/satori/) for client
+ * presentations, at 1920x1080. Order: login -> crear cliente -> crear
+ * recordatorio (eligiendo el cliente a mano, el campo ya no viene
+ * precargado) -> crear producción -> arrastrar una tarjeta en el embudo ->
+ * crear presupuesto (elegir cliente, ver cómo recién ahí aparece su
+ * producción asociada, elegirla, aplicar plantilla) -> enviarlo por email
+ * dos veces (la segunda dispara y confirma el diálogo de reenvío) ->
+ * dashboard. A synthetic cursor dot is drawn on the page so mouse
+ * movement/clicks are visible in the recording, and typing/clicks are
+ * paced slower on forms, faster on plain "look at this screen" moments.
  *
- * Usage: pnpm record:demo:desktop
+ * Requires `pnpm dev` already running on localhost:3000 before you start
+ * this script — it does not launch or manage the dev server itself.
+ *
+ * Usage: pnpm dev (en otra terminal) && pnpm record:demo:desktop
  * Output: recordings/satori-demo-desktop.mp4 (also keeps the raw .webm)
  *
  * Requires: chromium via `npx playwright install chromium`, and `ffmpeg`
@@ -25,7 +28,8 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 
-const BASE_URL = "https://nawel0310.github.io/satori/";
+const BASE_URL = "http://localhost:3000/satori/";
+const DEV_SERVER_URL = `${BASE_URL}login`;
 const OUT_DIR = path.resolve("recordings");
 const RAW_DIR = path.join(OUT_DIR, "raw-desktop");
 const VIEWPORT = { width: 1920, height: 1080 };
@@ -268,8 +272,20 @@ async function runScript(page) {
   await goTo(page, "General", "Panorama general", 2200);
 }
 
+async function checkDevServer() {
+  try {
+    const res = await fetch(DEV_SERVER_URL, { signal: AbortSignal.timeout(2000) });
+    if (!res.ok) throw new Error(`status ${res.status}`);
+  } catch (err) {
+    throw new Error(
+      `No hay dev server respondiendo en ${DEV_SERVER_URL} (${err.message}). Corré \`pnpm dev\` en otra terminal antes de grabar.`,
+    );
+  }
+}
+
 async function main() {
   await mkdir(RAW_DIR, { recursive: true });
+  await checkDevServer();
 
   const browser = await chromium.launch();
   const context = await browser.newContext({

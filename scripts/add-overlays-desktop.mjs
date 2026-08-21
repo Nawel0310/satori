@@ -30,13 +30,13 @@ const FADE = 0.3; // seconds
 // { lines: string[], fontsize: number[], start, end, band: "section" | "card" }
 const CAPTIONS = [
   { band: "card", start: 0.2, end: 6.8, lines: ["SATORI", "Gestión de Cliente y Presupuestos para producción audiovisual"], fontsize: [76, 34] },
-  { band: "section", start: 13.0, end: 22.5, lines: ["Creá un cliente en segundos"], fontsize: [42] },
-  { band: "section", start: 29.0, end: 38.5, lines: ["Que ningún seguimiento se pierda"], fontsize: [42] },
-  { band: "section", start: 45.0, end: 54.5, lines: ["Cargá tus producciones y asignalas a un cliente"], fontsize: [42] },
-  { band: "section", start: 60.5, end: 66.5, lines: ["Visualiza cada etapa de tus producciones"], fontsize: [42] },
-  { band: "section", start: 69.5, end: 81.5, lines: ["Armá presupuestos con plantillas reutilizables"], fontsize: [42] },
-  { band: "section", start: 83.5, end: 92.5, lines: ["Envialos por email en un click"], fontsize: [42] },
-  { band: "card", start: 94.5, end: 97.4, lines: ["¿Querés verlo funcionando con tus datos?", "Escribime"], fontsize: [50, 36] },
+  { band: "section", start: 13.0, end: 27.5, lines: ["Creá un cliente en segundos"], fontsize: [42] },
+  { band: "section", start: 31.0, end: 43.0, lines: ["Que ningún seguimiento se pierda"], fontsize: [42] },
+  { band: "section", start: 46.5, end: 62.0, lines: ["Cargá tus producciones y asignalas a un cliente"], fontsize: [42] },
+  { band: "section", start: 64.0, end: 69.5, lines: ["Visualiza cada etapa de tus producciones"], fontsize: [42] },
+  { band: "section", start: 72.0, end: 87.5, lines: ["Armá presupuestos con plantillas reutilizables"], fontsize: [42] },
+  { band: "section", start: 90.0, end: 97.0, lines: ["Envialos por email en un click"], fontsize: [42] },
+  { band: "card", start: 98.5, end: 101.6, lines: ["¿Querés verlo funcionando con tus datos?", "Escribime"], fontsize: [50, 36] },
 ];
 
 function escapeDrawtext(text) {
